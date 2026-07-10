@@ -1,0 +1,48 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'techpulse/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'techpulse/**'
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: techpulse
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29'
+          channel: 'stable'
+          cache: true
+
+      - run: flutter pub get
+      - run: flutter analyze
+
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: techpulse
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29'
+          channel: 'stable'
+          cache: true
+
+      - run: flutter pub get
+      - run: flutter test

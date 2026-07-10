@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechPulse Admin{{#title}} — {{title}}{{/title}}</title>
+  <link rel="stylesheet" href="/admin/admin.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>📰</text></svg>">
+  <script src="/admin/admin.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>TechPulse Admin</h1>
+      {{#loggedIn}}
+      <nav>
+        <a href="/admin/articles">Articles</a>
+        <a href="/admin/logout">Log out</a>
+      </nav>
+      {{/loggedIn}}
+    </div>
+  </header>
+  <main>
+    <div class="container">
+      {{#error}}
+      <div class="error">{{error}}</div>
+      {{/error}}
+      {{#success}}
+      <div class="success">{{success}}</div>
+      {{/success}}
+      {{body}}
+    </div>
+  </main>
+</body>
+</html>

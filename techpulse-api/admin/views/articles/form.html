@@ -1,0 +1,66 @@
+<div class="page-header">
+  <h2>{{#isEdit}}Edit Article{{/isEdit}}{{^isEdit}}New Article{{/isEdit}}</h2>
+  <a href="/admin/articles" class="btn btn-primary">← Back</a>
+</div>
+
+<form action="{{#isEdit}}/admin/articles/{{article.id}}/edit{{/isEdit}}{{^isEdit}}/admin/articles/new{{/isEdit}}" method="POST">
+  <div class="form-row">
+    <div class="form-group" style="flex:3">
+      <label for="title">Title *</label>
+      <input type="text" id="title" name="title" value="{{#article}}{{title}}{{/article}}" required>
+    </div>
+    <div class="form-group" style="flex:1">
+      <label for="category">Category *</label>
+      <select id="category" name="category" required>
+        <option value="">— Select —</option>
+        {{#categories}}
+        <option value="{{id}}" {{#selected}}selected{{/selected}}>{{name}}</option>
+        {{/categories}}
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="content">Content (HTML)</label>
+    <textarea id="content" name="content" rows="18">{{#article}}{{content}}{{/article}}</textarea>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group" style="flex:2">
+      <label for="thumbnail_url">Thumbnail URL</label>
+      <input type="url" id="thumbnail_url" name="thumbnail_url" value="{{#article}}{{thumbnailUrl}}{{/article}}" placeholder="https://example.com/image.jpg">
+    </div>
+    <div class="form-group" style="flex:1">
+      <label for="published_date">Published Date *</label>
+      <input type="date" id="published_date" name="published_date" value="{{#article}}{{publishedDate}}{{/article}}" placeholder="YYYY-MM-DD" required>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Affiliate Links</label>
+    <div id="affiliate-links">
+      {{#article.affiliateLinks}}
+      <div class="affiliate-row">
+        <input type="text" name="affiliate_label[]" placeholder="Label (e.g. Buy on Amazon)" value="{{label}}">
+        <input type="url" name="affiliate_url[]" placeholder="URL" value="{{url}}">
+        <button type="button" class="btn-remove" data-remove>✕</button>
+      </div>
+      {{/article.affiliateLinks}}
+      {{^article.affiliateLinks}}
+      <div class="affiliate-row">
+        <input type="text" name="affiliate_label[]" placeholder="Label (e.g. Buy on Amazon)">
+        <input type="url" name="affiliate_url[]" placeholder="URL">
+      </div>
+      {{/article.affiliateLinks}}
+    </div>
+    <button type="button" class="add-link-btn">+ Add link</button>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">
+      {{#isEdit}}Save Changes{{/isEdit}}{{^isEdit}}Create Article{{/isEdit}}
+    </button>
+    <a href="/admin/articles" class="btn" style="background:#e2e8f0">Cancel</a>
+  </div>
+</form>
+

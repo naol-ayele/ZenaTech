@@ -1,0 +1,42 @@
+
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=postgres://techpulse:techpulse123@db:5432/techpulse
+      - CORS_ORIGIN=*
+      - ADMIN_PASSWORD=hala@123wala
+      - SESSION_SECRET=ba15069dd65a15687d76af9eb0ed417df1a46c0f054a9ba70b3c3446faae7dc7
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=techpulse
+      - POSTGRES_PASSWORD=techpulse123
+      - POSTGRES_DB=techpulse
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U techpulse -d techpulse"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local

@@ -1,0 +1,138 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+import 'core/theme/app_theme.dart';
+import 'core/ads/ad_manager.dart';
+import 'core/services/user_service.dart';
+import 'services/connectivity_service/connectivity_service.dart';
+import 'services/notification_service/notification_service.dart';
+import 'navigation/app_router.dart';
+import 'presentation/providers/theme_provider.dart';
+import 'presentation/providers/article_providers.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+
+  await SentryFlutter.init(
+    (options) {
+      options.dsn = const String.fromEnvironment(
+        'SENTRY_DSN',
+        defaultValue: '',
+      );
+      options.tracesSampleRate = 0.2;
+    },
+    appRunner: () async {
+      try {
+        await adManager.initialize();
+      } catch (e) {
+        debugPrint('main: adManager.initialize() failed - $e');
+      }
+      try {
+        await userService.initialize();
+      } catch (e) {
+        debugPrint('main: userService.initialize() failed - $e');
+      }
+      try {
+        await notificationServiceProvider.initialize();
+      } catch (e) {
+        debugPrint('main: notificationServiceProvider.initialize() failed - $e');
+      }
+      try {
+        await connectivityServiceProvider.initialize();
+      } catch (e) {
+        debugPrint('main: connectivityServiceProvider.initialize() failed - $e');
+      }
+
+      runApp(const ProviderScope(child: TechPulseApp()));
+    },
+  );
+}
+
+class TechPulseApp extends ConsumerStatefulWidget {
+  const TechPulseApp({super.key});
+
+  @override
+  ConsumerState<TechPulseApp> createState() => _TechPulseAppState();
+}
+
+class _TechPulseAppState extends ConsumerState<TechPulseApp> {
+  StreamSubscription<NetworkStatus>? _connectivitySubscription;
+  final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
+  NetworkStatus _lastKnownStatus = NetworkStatus.online;
+
+  @override
+  void initState() {
+    super.initState();
+    _setupConnectivityListener();
+  }
+
+  void _setupConnectivityListener() {
+    _lastKnownStatus = connectivityServiceProvider.currentStatus;
+
+    _connectivitySubscription = connectivityServiceProvider.status.listen((
+      status,
+    ) {
+      debugPrint(
+        'ConnectivityService: Status received: $status (last: $_lastKnownStatus)',
+      );
+
+      if (_lastKnownStatus == NetworkStatus.offline &&
+          status == NetworkStatus.online) {
+        _onBackOnline();
+      }
+
+      _lastKnownStatus = status;
+    });
+  }
+
+  void _onBackOnline() {
+    debugPrint('Connectivity: Back online! Refreshing content...');
+
+    ref.invalidate(trendingArticlesProvider);
+    ref.invalidate(articlesProvider(1));
+    ref.invalidate(categoryArticlesProvider(''));
+    ref.invalidate(isOnlineProvider);
+
+    ref.read(trendingArticlesProvider);
+    ref.read(articlesProvider(1));
+
+    final messenger = _scaffoldMessengerKey.currentState;
+    if (messenger != null) {
+      messenger.showSnackBar(
+        SnackBar(
+          content: const Text('Connection restored. Refreshing content...'),
+          backgroundColor: AppColors.success,
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final themeMode = ref.watch(themeModeProvider);
+
+    return MaterialApp.router(
+      scaffoldMessengerKey: _scaffoldMessengerKey,
+      title: 'TechPulse',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeMode,
+      routerConfig: appRouter,
+    );
+  }
+}
