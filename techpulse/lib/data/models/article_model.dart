@@ -78,8 +78,8 @@ class AffiliateLinkModel extends AffiliateLink {
 
   factory AffiliateLinkModel.fromJson(Map<String, dynamic> json) {
     return AffiliateLinkModel(
-      label: json['label'] as String,
-      url: json['url'] as String,
+      label: json['label'] as String? ?? '',
+      url: json['url'] as String? ?? '',
     );
   }
 

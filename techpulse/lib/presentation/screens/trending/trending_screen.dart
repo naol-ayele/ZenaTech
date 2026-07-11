@@ -10,6 +10,7 @@ import '../../widgets/sliver_error_widget.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/user_service.dart';
 import '../../../core/constants/api_constants.dart';
+import '../../../domain/entities/article.dart';
 
 class TrendingScreen extends ConsumerWidget {
   const TrendingScreen({super.key});
@@ -150,17 +151,14 @@ class TrendingScreen extends ConsumerWidget {
   Widget _buildHeroCard(
     BuildContext context,
     WidgetRef ref,
-    dynamic article,
+    Article article,
     int rank,
     bool isDark,
-    AsyncValue<dynamic> favoritesState, {
+    AsyncValue<List<Article>> favoritesState, {
     bool isCompact = false,
   }) {
-    final content = article.content ?? '';
-    final publishedDate = article.publishedDate ?? DateTime.now();
-
-    final minRead = _calculateReadTime(content);
-    final timeAgo = _getTimeAgo(publishedDate);
+    final minRead = _calculateReadTime(article.content);
+    final timeAgo = _getTimeAgo(article.publishedDate);
     final isFavorite = favoritesState.maybeWhen(
       data: (favorites) => favorites.any((a) => a.id == article.id),
       orElse: () => false,
