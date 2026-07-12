@@ -147,15 +147,9 @@ class AdManager {
 
     return NativeAd(
       adUnitId: AdConfig.nativeAdUnitId,
-      listener: listener,
+      factoryId: _nativeFactoryId,
       request: const AdRequest(),
-      nativeAdOptions: NativeAdOptions(
-        mediaAspectRatio: MediaAspectRatio.landscape,
-        adChoicesPlacement: AdChoicesPlacement.topRightCorner,
-      ),
-      nativeTemplateStyle: NativeTemplateStyle(
-        templateType: TemplateType.medium,
-      ),
+      listener: listener,
     );
   }
 
