@@ -1,3 +1,13 @@
 cookies.txt
 *.log
 .DS_Store
+
+# Secrets & credentials (repo-root safety net)
+.env
+.env.local
+.env.*.local
+*.jks
+*.keystore
+key.properties
+service-account*.json
+*.pem

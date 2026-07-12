@@ -47,3 +47,12 @@ GoogleService-Info.plist
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Android signing secrets
+key.properties
+*.jks
+*.keystore
+
+# iOS signing (if/when iOS is configured)
+*.p12
+*.mobileprovision
