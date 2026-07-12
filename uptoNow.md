@@ -114,7 +114,7 @@ Flutter UI and state management:
 1. **Banner Ads:** Top of home screen, in article lists (every 5th item), trending list (every 4th item)
 2. **Interstitial Ads:** On article exit with frequency capping (every 3rd exit)
 3. **Rewarded Ads:** Premium content unlock for featured/deep dive articles
-4. **Native Ads:** Placeholder "Sponsored" widgets at home screen indices 3 and 7
+4. **Native Ads:** Custom layout (`native_ad_layout.xml`) via `NativeAdFactory` with "Sponsored" branding, rendered at home screen indices 3 and 7
 
 ### Backend API (Node.js + Express, 453 lines)
 **Middleware:** helmet ? cors ? compression ? morgan ? JSON body parser
@@ -154,11 +154,28 @@ Flutter UI and state management:
 3. **select() optimization** not applied (unnecessary rebuilds)
 4. **Offline mode** limited to cached favorites only
 5. **No unit or widget tests** (single placeholder, no mockito)
-6. **Native ads** return null (placeholder only)
-7. **AdServiceImpl** is stubbed (real google_mobile_ads commented out)
-8. **NotificationServiceImpl** is stubbed (real FCM commented out)
+6. ~~**Native ads** return null (placeholder only)~~ ✅ Fixed
+7. **NotificationServiceImpl** is stubbed (real FCM commented out)
 
 ---
+
+## Recent Fixes (July 2026)
+
+### 1. Native Ad Custom Factory Restored
+- **`ad_manager.dart`:** Replaced `NativeTemplateStyle`/`NativeAdOptions` with `factoryId` pointing to the custom Kotlin `NativeAdFactory`. This fixes duplicate-native-warning and ensures one rendering pipeline.
+- **`NativeAdFactory.kt`:** Removed `mediaView?.visibility = View.GONE` so the MediaView is visible when the SDK serves media content.
+- Native ads now render correctly at the custom layout's intrinsic size (no "MediaView too small" warning).
+
+### 2. Android Build Environment Fixed
+- **NDK:** Overrode broken NDK 28.2.13676358 to 29.0.14206865 in `build.gradle.kts` and `gradle.properties`.
+- **CMake:** Upgraded from 3.22.1 to 3.30.5 via SDK Manager; pinned in `local.properties`.
+- **Signing:** Fixed keystore path in `key.properties` (`storeFile=upload-keystore.jks` instead of `storeFile=app/upload-keystore.jks`).
+- Release APK builds and installs successfully on device.
+
+### 3. Backend Connectivity
+- Backend runs in Docker on LAN at `10.58.117.161:3000`.
+- Windows Firewall blocks inbound port 3000 (no admin access to create rule).
+- Workaround: `adb reverse tcp:3000 tcp:3000` + `http://localhost:3000/v1` for device testing.
 
 ## Project Stats
 

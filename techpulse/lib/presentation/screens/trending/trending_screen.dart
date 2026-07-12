@@ -18,7 +18,6 @@ class TrendingScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final trendingAsync = ref.watch(trendingArticlesProvider);
-    final favoritesState = ref.watch(favoritesNotifierProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
@@ -135,7 +134,6 @@ class TrendingScreen extends ConsumerWidget {
                           article,
                           index + 1,
                           isDark,
-                          favoritesState,
                           isCompact: true,
                         );
                       }, childCount: articles.length + (articles.length ~/ 4)),
@@ -153,14 +151,14 @@ class TrendingScreen extends ConsumerWidget {
     WidgetRef ref,
     Article article,
     int rank,
-    bool isDark,
-    AsyncValue<List<Article>> favoritesState, {
+    bool isDark, {
     bool isCompact = false,
   }) {
     final minRead = _calculateReadTime(article.content);
     final timeAgo = _getTimeAgo(article.publishedDate);
-    final isFavorite = favoritesState.maybeWhen(
-      data: (favorites) => favorites.any((a) => a.id == article.id),
+    final isFavoriteAsync = ref.watch(isFavoriteProvider(article.id));
+    final isFavorite = isFavoriteAsync.maybeWhen(
+      data: (fav) => fav,
       orElse: () => false,
     );
 

@@ -1,0 +1,57 @@
+name: Scheduled Database Backup
+
+# Runs backup.sh on a schedule and uploads the dump as a workflow artifact.
+# NOTE: GitHub Actions artifacts expire (default 90 days) — this is a
+# reasonable free starting point, but for a real production system consider
+# pushing the dump to S3/Backblaze/etc. instead of relying on artifacts alone.
+# The "upload to external storage" step below is left as a TODO — wire in
+# whichever storage you actually have credentials for.
+
+on:
+  schedule:
+    # Runs daily at 02:00 UTC — adjust to your preferred time.
+    - cron: '0 2 * * *'
+  workflow_dispatch: {} # allows manual "Run workflow" trigger from the Actions tab
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install postgresql-client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Run backup script
+        working-directory: techpulse-api
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          chmod +x scripts/backup.sh
+          ./scripts/backup.sh
+
+      - name: Upload backup as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: techpulse-db-backup-${{ github.run_id }}
+          path: techpulse-api/backups/*.sql
+          retention-days: 30
+
+      # TODO: replace the artifact-only approach above with a push to
+      # long-term external storage once you have a target picked, e.g.:
+      #
+      # - name: Upload to S3
+      #   run: aws s3 cp techpulse-api/backups/*.sql s3://your-bucket/backups/
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Fail loudly if backup file is empty or missing
+        working-directory: techpulse-api
+        run: |
+          FILE=$(ls -t backups/*.sql 2>/dev/null | head -n1)
+          if [ -z "$FILE" ] || [ ! -s "$FILE" ]; then
+            echo "::error::Backup file missing or empty — treat this as a failed backup"
+            exit 1
+          fi
