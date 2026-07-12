@@ -4,7 +4,6 @@ import '../../data/datasources/remote/article_remote_datasource.dart';
 import '../../data/datasources/remote/category_remote_datasource.dart';
 import '../../data/datasources/local/favorites_local_datasource.dart';
 import '../../data/datasources/local/search_history_local_datasource.dart';
-import '../../data/datasources/local/article_local_datasource.dart';
 import '../../data/repositories/article_repository_impl.dart';
 import '../../data/repositories/category_repository_impl.dart';
 import '../../data/repositories/local_repository_impl.dart';
@@ -37,14 +36,9 @@ final searchHistoryLocalDatasourceProvider =
       return SearchHistoryLocalDatasourceImpl();
     });
 
-final articleLocalDatasourceProvider = Provider<ArticleLocalDatasource>((ref) {
-  return ArticleLocalDatasourceImpl();
-});
-
 final articleRepositoryProvider = Provider<ArticleRepository>((ref) {
   return ArticleRepositoryImpl(
     ref.watch(articleRemoteDatasourceProvider),
-    ref.watch(articleLocalDatasourceProvider),
   );
 });
 

@@ -14,5 +14,4 @@ abstract class ArticleRepository {
     int limit = 20,
   });
   Future<List<Article>> getTrendingArticles();
-  Future<List<Article>> getFavoriteArticles(List<String> ids);
 }
