@@ -50,7 +50,6 @@ class NativeAdFactoryImpl(private val context: Context) :
 
         val mediaView = adView.findViewById<MediaView>(R.id.ad_media)
         adView.mediaView = mediaView
-        mediaView?.visibility = View.GONE
 
         val attributionView = adView.findViewById<TextView>(R.id.ad_attribution)
         attributionView?.visibility = View.VISIBLE
