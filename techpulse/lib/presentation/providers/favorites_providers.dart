@@ -48,6 +48,7 @@ class FavoritesNotifier extends StateNotifier<AsyncValue<List<Article>>> {
       }
       debugPrint('refresh favorites list');
       await loadFavorites();
+      _ref.invalidate(isFavoriteProvider(article.id));
       debugPrint('toggleFavorite complete');
     } catch (e, st) {
       debugPrint('toggleFavorite error: $e');
