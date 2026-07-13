@@ -15,6 +15,9 @@ Sentry.init({
 
 const app = express();
 
+// Trust Render's proxy for correct rate-limiting IP detection
+app.set('trust proxy', 1);
+
 // Security middleware
 app.use(helmet({
   contentSecurityPolicy: {
