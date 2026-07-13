@@ -16,7 +16,7 @@ describe('GET /v1/articles', () => {
     const { query } = require('../db');
     query.mockResolvedValueOnce({
       rows: [
-        { id: '1', title: 'Article 1', content: '<p>Hello</p>', category: 'tech', published_date: '2024-01-01', views: 10, upvotes: 2, is_premium: false, thumbnail_url: null, affiliate_links: [] },
+        { id: '1', title: 'Article 1', content: '<p>Hello</p>', category: 'tech', published_date: '2024-01-01', views: 10, is_premium: false, thumbnail_url: null, affiliate_links: [] },
       ],
     });
     query.mockResolvedValueOnce({ rows: [{ count: '1' }] });
@@ -44,7 +44,7 @@ describe('GET /v1/articles/trending', () => {
     const { query } = require('../db');
     query.mockResolvedValueOnce({
       rows: [
-        { id: '1', title: 'Trending', category: 'tech', views: 100, upvotes: 10, is_premium: false, content: '<p>Hello</p>', thumbnail_url: null, published_date: '2024-01-01', created_at: '2024-01-01', updated_at: '2024-01-01', is_liked: false },
+        { id: '1', title: 'Trending', category: 'tech', views: 100, is_premium: false, content: '<p>Hello</p>', thumbnail_url: null, published_date: '2024-01-01', created_at: '2024-01-01', updated_at: '2024-01-01' },
       ],
     });
 

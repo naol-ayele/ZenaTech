@@ -55,41 +55,23 @@ router.get('/articles', async (req, res) => {
   }
 });
 
-// GET /v1/articles/trending - Get trending articles
+// GET /v1/articles/trending - Get trending articles sorted by views
 router.get('/articles/trending', async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 10;
-    const anonymousId = req.headers['x-anonymous-id'] || req.query['anonymous_id'];
-
-    let articles;
-    if (anonymousId) {
-      const result = await db.query(
-        `SELECT a.id, a.title, a.category, a.content, a.thumbnail_url, a.published_date, a.views, a.upvotes, a.is_premium, a.created_at, a.updated_at,
-          (SELECT 1 FROM article_likes WHERE article_id = a.id AND anonymous_id = $2 LIMIT 1) IS NOT NULL as is_liked
-         FROM articles a
-         ORDER BY a.views DESC 
-         LIMIT $1`,
-        [limit, anonymousId]
-      );
-      articles = result.rows;
-    } else {
-      const result = await db.query(
-        `SELECT a.id, a.title, a.category, a.content, a.thumbnail_url, a.published_date, a.views, a.upvotes, a.is_premium, a.created_at, a.updated_at, false as is_liked
-         FROM articles a
-         ORDER BY a.views DESC 
-         LIMIT $1`,
-        [limit]
-      );
-      articles = result.rows;
-    }
-
-    articles = articles.map(article => {
+    const result = await db.query(
+      `SELECT a.id, a.title, a.category, a.content, a.thumbnail_url, a.published_date, a.views, a.is_premium, a.created_at, a.updated_at
+       FROM articles a
+       ORDER BY a.views DESC
+       LIMIT $1`,
+      [limit]
+    );
+    const articles = result.rows.map(article => {
       const contentText = article.content ? article.content.replace(/<[^>]*>/g, '') : '';
       const wordCount = contentText.split(/\s+/).filter(w => w.length > 0).length;
       article.reading_time = Math.ceil(wordCount / 200);
       return article;
     });
-
     res.json({ articles });
   } catch (error) {
     console.error('Error fetching trending:', error);
@@ -144,39 +126,6 @@ router.patch('/articles/:id/view', async (req, res) => {
     res.json({ success: true });
   } catch (error) {
     console.error('Error incrementing view:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// POST /v1/articles/:id/like - Increment upvotes
-router.post('/articles/:id/like', moderateLimiter, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { anonymous_id } = req.body;
-
-    if (!anonymous_id) {
-      return res.status(400).json({ error: 'anonymous_id is required' });
-    }
-
-    await db.query(
-      `INSERT INTO article_likes (article_id, anonymous_id)
-       VALUES ($1::text, $2)
-       ON CONFLICT (article_id, anonymous_id) DO NOTHING`,
-      [id, anonymous_id]
-    );
-
-    const existingLike = await db.query(
-      'SELECT id FROM article_likes WHERE article_id = $1::text AND anonymous_id = $2',
-      [id, anonymous_id]
-    );
-
-    if (existingLike.rows.length === 1) {
-      await db.query('UPDATE articles SET upvotes = upvotes + 1 WHERE id = $1::uuid', [id]);
-    }
-
-    res.json({ success: true });
-  } catch (error) {
-    console.error('Error liking article:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

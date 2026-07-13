@@ -1,3 +1,8 @@
+-- SUPERSEDED — schema dropped in favor of view-only trending (no upvotes/likes)
+-- The upvotes column was removed and article_likes table was dropped.
+-- Trending is now purely view-count-based (views DESC).
+-- This file is kept only as history; do not run.
+
 -- Migration: Add engagement columns and like tracking
 -- Run this SQL in your PostgreSQL database
 
