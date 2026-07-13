@@ -234,6 +234,17 @@ class AppLocalizationsAm extends AppLocalizations {
   String get connectionRestored => 'ግንኙነት ተመልሷል። ይዘትን በማደስ ላይ...';
 
   @override
+  String pillNewArticles(int count) {
+    return '$count አዲስ መጣጥፎች — ለማየት ይንኩ';
+  }
+
+  @override
+  String get timeToday => 'ዛሬ';
+
+  @override
+  String get timeYesterday => 'ትላንትና';
+
+  @override
   String get timeJustNow => 'አሁን ያህል';
 
   @override

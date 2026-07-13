@@ -236,6 +236,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get connectionRestored => 'Connection restored. Refreshing content...';
 
   @override
+  String pillNewArticles(int count) {
+    return '$count new articles — tap to load';
+  }
+
+  @override
+  String get timeToday => 'Today';
+
+  @override
+  String get timeYesterday => 'Yesterday';
+
+  @override
   String get timeJustNow => 'Just now';
 
   @override

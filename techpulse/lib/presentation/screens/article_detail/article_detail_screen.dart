@@ -418,6 +418,12 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                                 fontSize: FontSize(15.0),
                                 lineHeight: LineHeight(1.6),
                               ),
+                              "ul": Style(
+                                listStyleType: ListStyleType.disc,
+                              ),
+                              "ol": Style(
+                                listStyleType: ListStyleType.decimal,
+                              ),
                             },
                           ),
                         ),
@@ -500,7 +506,18 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
           '<p style="color: #666; font-style: italic;">'
           '${AppLocalizations.of(context)!.promptContinueAd}</p>';
     }
-    return article.content;
+    var content = article.content;
+    content = content.replaceAllMapped(
+      RegExp(r'<ol>(.*?)</ol>', dotAll: true),
+      (m) {
+        final inner = m.group(1)!;
+        if (inner.contains('data-list="bullet"')) {
+          return '<ul>${inner.replaceAll(RegExp(r'\s*data-list="bullet"\s*'), '')}</ul>';
+        }
+        return m.group(0)!;
+      },
+    );
+    return content;
   }
 
   Future<void> _launchUrl(String url) async {

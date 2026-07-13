@@ -102,6 +102,14 @@
 
   "connectionRestored": "Connection restored. Refreshing content...",
 
+  "pillNewArticles": "{count} new articles — tap to load",
+  "@pillNewArticles": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "timeToday": "Today",
+  "timeYesterday": "Yesterday",
   "timeJustNow": "Just now",
   "timeMinutesAgo": "{minutes}m ago",
   "@timeMinutesAgo": {

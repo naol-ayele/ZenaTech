@@ -536,6 +536,24 @@ abstract class AppLocalizations {
   /// **'Connection restored. Refreshing content...'**
   String get connectionRestored;
 
+  /// No description provided for @pillNewArticles.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} new articles — tap to load'**
+  String pillNewArticles(int count);
+
+  /// No description provided for @timeToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get timeToday;
+
+  /// No description provided for @timeYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get timeYesterday;
+
   /// No description provided for @timeJustNow.
   ///
   /// In en, this message translates to:

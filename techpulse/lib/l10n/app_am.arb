@@ -107,6 +107,14 @@
 
   "connectionRestored": "ግንኙነት ተመልሷል። ይዘትን በማደስ ላይ...",
 
+  "pillNewArticles": "{count} አዲስ መጣጥፎች — ለማየት ይንኩ",
+  "@pillNewArticles": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "timeToday": "ዛሬ",
+  "timeYesterday": "ትላንትና",
   "timeJustNow": "አሁን ያህል",
   "timeMinutesAgo": "ከ{minutes} ደቂቃ በፊት",
   "@timeMinutesAgo": {
