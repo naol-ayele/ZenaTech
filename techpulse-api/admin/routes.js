@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const db = require('../db');
+const NotificationService = require('../services/notification_service');
 const adminAuth = require('./middleware/adminAuth');
 
 const router = express.Router();
@@ -251,6 +252,14 @@ router.post('/articles/new', async (req, res) => {
       `UPDATE categories SET article_count = (SELECT COUNT(*) FROM articles WHERE category = $1) WHERE id = $1`,
       [sanitizedCategory]
     );
+
+    // Send push notification (fire-and-forget, don't block redirect)
+    NotificationService.sendNewArticleNotification({
+      id: articleId,
+      title: sanitizedTitle,
+      category: sanitizedCategory,
+    }).then(r => console.log('Notification result:', r))
+      .catch(e => console.error('Notification error:', e));
 
     res.redirect('/admin/articles?success=Article+created');
   } catch (err) {
