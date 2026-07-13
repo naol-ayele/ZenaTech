@@ -25,7 +25,7 @@ router.get('/articles', async (req, res) => {
       FROM articles a
       LEFT JOIN affiliate_links al ON al.article_id = a.id
       GROUP BY a.id
-      ORDER BY a.published_date DESC
+      ORDER BY a.published_date DESC, a.created_at DESC
       LIMIT $1 OFFSET $2`,
       [limit, offset]
     );
@@ -158,7 +158,7 @@ router.get('/categories/:id/articles', async (req, res) => {
     const result = await db.query(
       `SELECT * FROM articles 
       WHERE category = $1 
-      ORDER BY published_date DESC
+      ORDER BY published_date DESC, created_at DESC
       LIMIT $2 OFFSET $3`,
       [id, limit, offset]
     );
@@ -208,7 +208,7 @@ router.get('/search', async (req, res) => {
         ) AS rank
       FROM articles a
       WHERE to_tsvector('english', coalesce(a.title, '') || ' ' || coalesce(a.content, '') || ' ' || coalesce(a.category, '')) @@ to_tsquery('english', $1)
-      ORDER BY rank DESC, a.views DESC, a.published_date DESC
+      ORDER BY rank DESC, a.views DESC, a.published_date DESC, a.created_at DESC
       LIMIT $2 OFFSET $3`,
       [tsQuery, limit, offset]
     );
