@@ -1,11 +1,13 @@
 require('dotenv').config();
 const { Pool } = require('pg');
 
-const isProduction = process.env.NODE_ENV === 'production';
+let connectionString = process.env.DATABASE_URL || '';
+connectionString = connectionString.includes('sslmode=')
+  ? connectionString.replace(/sslmode=[^&]+/, 'sslmode=verify-full')
+  : connectionString + (connectionString.includes('?') ? '&' : '?') + 'sslmode=verify-full';
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: isProduction ? false : false,
+  connectionString,
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000,
