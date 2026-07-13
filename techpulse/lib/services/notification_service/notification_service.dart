@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../core/constants/api_constants.dart';
 import '../../l10n/app_localizations_en.dart';
+import '../../navigation/app_router.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -59,7 +60,24 @@ class NotificationService {
       android: androidSettings,
       iOS: iosSettings,
     );
-    await _localNotifications.initialize(initSettings);
+    await _localNotifications.initialize(
+      initSettings,
+      onDidReceiveNotificationResponse: (response) {
+        if (response.payload != null) {
+          try {
+            final data = jsonDecode(response.payload!);
+            final articleId = data['articleId'];
+            if (articleId != null) {
+              appRouter.go('/article/$articleId');
+            }
+          } catch (e) {
+            debugPrint(
+              'NotificationService: notification payload parse error - $e',
+            );
+          }
+        }
+      },
+    );
 
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 

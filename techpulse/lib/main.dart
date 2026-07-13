@@ -14,6 +14,8 @@ import 'presentation/providers/locale_provider.dart';
 import 'presentation/providers/article_providers.dart';
 import 'l10n/app_localizations.dart';
 
+String? _pendingNotificationArticleId;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
@@ -42,6 +44,9 @@ Future<void> main() async {
       } catch (e) {
         debugPrint('main: notificationServiceProvider.initialize() failed - $e');
       }
+      final initialMessage =
+          await notificationServiceProvider.getInitialMessage();
+      _pendingNotificationArticleId = initialMessage?.data['articleId'];
       try {
         await connectivityServiceProvider.initialize();
       } catch (e) {
@@ -69,6 +74,18 @@ class _TechPulseAppState extends ConsumerState<TechPulseApp> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_pendingNotificationArticleId != null) {
+        context.push('/article/$_pendingNotificationArticleId');
+        _pendingNotificationArticleId = null;
+      }
+    });
+    notificationServiceProvider.onMessageOpenedApp.listen((message) {
+      final id = message.data['articleId'];
+      if (id != null) {
+        appRouter.go('/article/$id');
+      }
+    });
     _setupConnectivityListener();
   }
 
