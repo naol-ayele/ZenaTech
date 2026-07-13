@@ -21,8 +21,10 @@
   </div>
 
   <div class="form-group">
-    <label for="content">Content (HTML)</label>
-    <textarea id="content" name="content" rows="18">{{#article}}{{content}}{{/article}}</textarea>
+    <label>Content</label>
+    <div id="editor-toolbar"></div>
+    <div id="editor-container" style="height: 350px;"></div>
+    <textarea name="content" id="content-hidden" style="display: none;">{{#article}}{{content}}{{/article}}</textarea>
   </div>
 
   <div class="form-row">
@@ -63,4 +65,5 @@
     <a href="/admin/articles" class="btn" style="background:#e2e8f0">Cancel</a>
   </div>
 </form>
+
 

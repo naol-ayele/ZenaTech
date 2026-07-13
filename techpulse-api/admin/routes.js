@@ -28,8 +28,8 @@ function render(templateName, data) {
   let html = template;
 
   // Section blocks ({{#key}}...{{/key}})
-  html = html.replace(/\{\{#(\w+)\}\}([\s\S]*?)\{\{\/\1\}\}/g, (_, key, content) => {
-    const val = data[key];
+  html = html.replace(/\{\{#([\w.]+)\}\}([\s\S]*?)\{\{\/\1\}\}/g, (_, key, content) => {
+    const val = resolveValue(data, key);
     if (key === 'article' && val && typeof val === 'object') {
       if (Object.keys(val).length > 0) return renderPartial(content, data);
       return '';
@@ -42,8 +42,8 @@ function render(templateName, data) {
   });
 
   // Inverted section blocks ({{^key}}...{{/key}})
-  html = html.replace(/\{\{\^(\w+)\}\}([\s\S]*?)\{\{\/\1\}\}/g, (_, key, content) => {
-    const val = data[key];
+  html = html.replace(/\{\{\^([\w.]+)\}\}([\s\S]*?)\{\{\/\1\}\}/g, (_, key, content) => {
+    const val = resolveValue(data, key);
     if (Array.isArray(val)) {
       return val.length === 0 ? renderPartial(content, data) : '';
     }
@@ -54,7 +54,8 @@ function render(templateName, data) {
   html = html.replace(/\{\{(.+?)\}\}/g, (_, key) => {
     const trimmed = key.trim();
     if (trimmed === 'body') return data.body || '';
-    return data[trimmed] !== undefined ? escapeHtml(String(data[trimmed])) : '';
+    const value = resolveValue(data, trimmed);
+    return value !== undefined ? escapeHtml(String(value)) : '';
   });
 
   return html;
@@ -64,8 +65,8 @@ function renderPartial(template, data) {
   let html = template;
 
   // Section blocks
-  html = html.replace(/\{\{#(\w+)\}\}([\s\S]*?)\{\{\/\1\}\}/g, (_, key, content) => {
-    const val = data[key];
+  html = html.replace(/\{\{#([\w.]+)\}\}([\s\S]*?)\{\{\/\1\}\}/g, (_, key, content) => {
+    const val = resolveValue(data, key);
     if (key === 'article' && val && typeof val === 'object') {
       if (Object.keys(val).length > 0) return renderPartial(content, { ...data, ...val, article: val });
       return '';
@@ -78,8 +79,8 @@ function renderPartial(template, data) {
   });
 
   // Inverted section blocks
-  html = html.replace(/\{\{\^(\w+)\}\}([\s\S]*?)\{\{\/\1\}\}/g, (_, key, content) => {
-    const val = data[key];
+  html = html.replace(/\{\{\^([\w.]+)\}\}([\s\S]*?)\{\{\/\1\}\}/g, (_, key, content) => {
+    const val = resolveValue(data, key);
     if (Array.isArray(val)) return val.length === 0 ? renderPartial(content, data) : '';
     return val ? '' : renderPartial(content, data);
   });
@@ -87,10 +88,21 @@ function renderPartial(template, data) {
   // Variables
   html = html.replace(/\{\{(.+?)\}\}/g, (_, key) => {
     const trimmed = key.trim();
-    return data[trimmed] !== undefined ? escapeHtml(String(data[trimmed])) : '';
+    const value = resolveValue(data, trimmed);
+    return value !== undefined ? escapeHtml(String(value)) : '';
   });
 
   return html;
+}
+
+function resolveValue(data, path) {
+  const parts = path.split('.');
+  let value = data;
+  for (const part of parts) {
+    if (value == null || !Object.prototype.hasOwnProperty.call(value, part)) return undefined;
+    value = value[part];
+  }
+  return value;
 }
 
 function escapeHtml(str) {
@@ -100,6 +112,10 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
+}
+
+function normalizeArray(val) {
+  return Array.isArray(val) ? val : (val ? [val] : []);
 }
 
 // ─── Public: Login ───────────────────────────────────────────────
@@ -133,8 +149,9 @@ router.use(adminAuth);
 router.get('/articles', async (req, res) => {
   try {
     const result = await db.query(
-      `SELECT a.id, a.title, a.category, a.views, a.published_date
+      `SELECT a.id, a.title, c.name AS category, a.views, a.published_date
        FROM articles a
+       JOIN categories c ON c.id = a.category
        ORDER BY a.published_date DESC, a.created_at DESC`
     );
     const articles = result.rows.map(a => ({
@@ -188,15 +205,22 @@ router.get('/articles/new', async (req, res) => {
 router.post('/articles/new', async (req, res) => {
   try {
     const { title, category, content, thumbnail_url, published_date } = req.body;
-    const affiliateLabels = req.body['affiliate_label[]'] || [];
-    const affiliateUrls = req.body['affiliate_url[]'] || [];
+    const affiliateLabels = normalizeArray(req.body['affiliate_label[]']);
+    const affiliateUrls = normalizeArray(req.body['affiliate_url[]']);
 
-    if (!title || !category || !published_date) {
+    const sanitizedTitle = title ? title.replace(/<[^>]*>/g, '').substring(0, 200).trim() : '';
+    const sanitizedCategory = category ? category.replace(/<[^>]*>/g, '').substring(0, 100).trim() : '';
+
+    if (!sanitizedTitle || !sanitizedCategory || !published_date) {
+      const affiliateLinks = affiliateLabels.map((_, i) => ({
+        label: affiliateLabels[i] || '',
+        url: affiliateUrls[i] || '',
+      })).filter(l => l.label || l.url);
       const cats = await db.query('SELECT id, name FROM categories ORDER BY name');
       return res.send(render('articles/form.html', {
         title: 'New Article', categories: cats.rows.map(c => ({ id: c.id, name: c.name })),
         isEdit: false, error: 'Title, category, and published date are required.',
-        article: { title, content, thumbnailUrl: thumbnail_url, publishedDate: published_date }
+        article: { title: sanitizedTitle, content, thumbnailUrl: thumbnail_url, publishedDate: published_date, affiliateLinks }
       }));
     }
 
@@ -204,7 +228,7 @@ router.post('/articles/new', async (req, res) => {
       `INSERT INTO articles (title, category, content, thumbnail_url, published_date, is_premium)
        VALUES ($1, $2, $3, $4, $5, false)
        RETURNING id`,
-      [title, category, content || '', thumbnail_url || '', published_date]
+      [sanitizedTitle, sanitizedCategory, content || '', thumbnail_url || '', published_date]
     );
     const articleId = result.rows[0].id;
 
@@ -225,7 +249,7 @@ router.post('/articles/new', async (req, res) => {
     // Update category article count
     await db.query(
       `UPDATE categories SET article_count = (SELECT COUNT(*) FROM articles WHERE category = $1) WHERE id = $1`,
-      [category]
+      [sanitizedCategory]
     );
 
     res.redirect('/admin/articles?success=Article+created');
@@ -287,17 +311,44 @@ router.post('/articles/:id/edit', async (req, res) => {
   try {
     const { id } = req.params;
     const { title, category, content, thumbnail_url, published_date } = req.body;
-    const affiliateLabels = req.body['affiliate_label[]'] || [];
-    const affiliateUrls = req.body['affiliate_url[]'] || [];
+    const affiliateLabels = normalizeArray(req.body['affiliate_label[]']);
+    const affiliateUrls = normalizeArray(req.body['affiliate_url[]']);
 
-    if (!title || !category || !published_date) {
-      return res.redirect(`/admin/articles/${id}/edit?error=Title%2C+category%2C+and+published+date+are+required`);
+    const sanitizedTitle = title ? title.replace(/<[^>]*>/g, '').substring(0, 200).trim() : '';
+    const sanitizedCategory = category ? category.replace(/<[^>]*>/g, '').substring(0, 100).trim() : '';
+
+    if (!sanitizedTitle || !sanitizedCategory || !published_date) {
+      const affiliateLinks = affiliateLabels.map((_, i) => ({
+        label: affiliateLabels[i] || '',
+        url: affiliateUrls[i] || '',
+      })).filter(l => l.label || l.url);
+      const cats = await db.query('SELECT id, name FROM categories ORDER BY name');
+      const categories = cats.rows.map(c => ({
+        id: c.id,
+        name: c.name,
+        selected: c.id === sanitizedCategory ? 'selected' : '',
+      }));
+      return res.send(render('articles/form.html', {
+        title: 'Edit Article',
+        categories, isEdit: true,
+        article: {
+          id, title: sanitizedTitle, content,
+          thumbnailUrl: thumbnail_url,
+          publishedDate: published_date,
+          affiliateLinks,
+        },
+        error: 'Title, category, and published date are required.',
+      }));
     }
+
+    // Fetch old category BEFORE the UPDATE so we can adjust counts correctly
+    const oldCatResult = await db.query('SELECT category FROM articles WHERE id = $1', [id]);
+    const oldCategory = oldCatResult.rows.length > 0 ? oldCatResult.rows[0].category : null;
 
     await db.query(
       `UPDATE articles SET title = $1, category = $2, content = $3, thumbnail_url = $4, published_date = $5, updated_at = NOW()
        WHERE id = $6`,
-      [title, category, content || '', thumbnail_url || '', published_date, id]
+      [sanitizedTitle, sanitizedCategory, content || '', thumbnail_url || '', published_date, id]
     );
 
     // Replace affiliate links
@@ -317,16 +368,12 @@ router.post('/articles/:id/edit', async (req, res) => {
     }
 
     // Update category article count for old and new categories
-    const oldArticle = await db.query('SELECT category FROM articles WHERE id = $1', [id]);
-    if (oldArticle.rows.length > 0) {
-      const oldCat = oldArticle.rows[0].category;
-      const catsToUpdate = [...new Set([oldCat, category])];
-      for (const cat of catsToUpdate) {
-        await db.query(
-          `UPDATE categories SET article_count = (SELECT COUNT(*) FROM articles WHERE category = $1) WHERE id = $1`,
-          [cat]
-        );
-      }
+    const catsToUpdate = [...new Set([oldCategory, sanitizedCategory].filter(Boolean))];
+    for (const cat of catsToUpdate) {
+      await db.query(
+        `UPDATE categories SET article_count = (SELECT COUNT(*) FROM articles WHERE category = $1) WHERE id = $1`,
+        [cat]
+      );
     }
 
     res.redirect('/admin/articles?success=Article+updated');
