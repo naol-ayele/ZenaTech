@@ -7,7 +7,7 @@ ALTER TABLE articles ADD COLUMN IF NOT EXISTS upvotes INTEGER DEFAULT 0;
 -- Create article_likes table to track anonymous users who liked articles
 CREATE TABLE IF NOT EXISTS article_likes (
   id SERIAL PRIMARY KEY,
-  article_id INTEGER NOT NULL,
+  article_id UUID NOT NULL,
   anonymous_id VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT NOW(),
   CONSTRAINT fk_article_like FOREIGN KEY (article_id) 

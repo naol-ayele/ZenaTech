@@ -65,7 +65,7 @@ router.get('/articles/trending', async (req, res) => {
     if (anonymousId) {
       const result = await db.query(
         `SELECT a.id, a.title, a.category, a.content, a.thumbnail_url, a.published_date, a.views, a.upvotes, a.is_premium, a.created_at, a.updated_at,
-          (SELECT 1 FROM article_likes WHERE article_id = a.id::text AND anonymous_id = $2 LIMIT 1) IS NOT NULL as is_liked
+          (SELECT 1 FROM article_likes WHERE article_id = a.id AND anonymous_id = $2 LIMIT 1) IS NOT NULL as is_liked
          FROM articles a
          ORDER BY a.views DESC 
          LIMIT $1`,

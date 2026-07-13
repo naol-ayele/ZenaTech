@@ -5,7 +5,7 @@
 CREATE TABLE IF NOT EXISTS user_interests (
   id SERIAL PRIMARY KEY,
   anonymous_id VARCHAR(255) NOT NULL,
-  category_id INTEGER NOT NULL,
+  category_id VARCHAR(50) NOT NULL,
   interaction_count INTEGER DEFAULT 1,
   last_interacted_at TIMESTAMP DEFAULT NOW(),
   created_at TIMESTAMP DEFAULT NOW(),
