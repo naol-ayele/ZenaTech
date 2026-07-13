@@ -49,8 +49,7 @@ class NotificationService {
         android: {
           priority: "high",
           notification: {
-            channelId: "new_articles",
-            channelName: "New Articles",
+            channelId: "techpulse_channel",
           },
         },
         apns: {
