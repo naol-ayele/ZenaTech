@@ -3,6 +3,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/constants/api_constants.dart';
+import '../../l10n/app_localizations.dart';
+import '../../core/utils/time_ago.dart';
 
 enum NewsCardLayout { hero, standard, compact }
 
@@ -42,6 +44,7 @@ class _LiveBadgeState extends State<LiveBadge>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
@@ -69,7 +72,7 @@ class _LiveBadgeState extends State<LiveBadge>
             const SizedBox(width: 4),
           ],
           Text(
-            widget.isLive ? 'LIVE' : 'NEW',
+            widget.isLive ? l10n.badgeLive : l10n.badgeNew,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 10,
@@ -127,15 +130,6 @@ class _TechPulseNewsCardState extends State<TechPulseNewsCard> {
     }
   }
 
-  String _getTimeAgo() {
-    final diff = DateTime.now().difference(widget.publishedDate);
-    if (diff.inMinutes < 1) return 'Just now';
-    if (diff.inMinutes < 60) return '${diff.inMinutes} min ago';
-    if (diff.inHours < 24) return '${diff.inHours}h ago';
-    if (diff.inDays < 7) return '${diff.inDays}d ago';
-    return '${widget.publishedDate.day}/${widget.publishedDate.month}/${widget.publishedDate.year}';
-  }
-
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -171,112 +165,113 @@ class _TechPulseNewsCardState extends State<TechPulseNewsCard> {
   }
 
   Widget _buildHeroCard(BuildContext context, bool isDark) {
+    final l10n = AppLocalizations.of(context)!;
     return Semantics(
       button: true,
-      label: 'Read article: ${widget.title}',
+      label: l10n.semanticsReadArticle(widget.title),
       child: GestureDetector(
-      onTap: () {
-        _trackView();
-        widget.onTap();
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        height: 280,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: isDark ? 0.4 : 0.15),
-              blurRadius: 20,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              CachedNetworkImage(
-                imageUrl: widget.thumbnailUrl,
-                fit: BoxFit.cover,
-                placeholder: (_, __) => Container(
-                  color: isDark ? AppColors.cardDark : Colors.grey[200],
-                ),
-                errorWidget: (_, __, ___) => Container(
-                  color: isDark ? AppColors.cardDark : Colors.grey[200],
-                  child: const Icon(Icons.image_not_supported),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      Colors.black.withValues(alpha: 0.8),
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 16,
-                left: 16,
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryBlue,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        widget.category.toUpperCase(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                    ),
-                    if (widget.isLive == true) ...[
-                      const SizedBox(width: 8),
-                      LiveBadge(isLive: true),
-                    ],
-                  ],
-                ),
-              ),
-              Positioned(
-                bottom: 20,
-                left: 20,
-                right: 20,
-                child: Text(
-                  widget.title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    height: 1.3,
-                  ),
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              Positioned(
-                bottom: 8,
-                left: 20,
-                right: 20,
-                child: Row(children: [_chip(Icons.schedule, _getTimeAgo())]),
+        onTap: () {
+          _trackView();
+          widget.onTap();
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          height: 280,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: isDark ? 0.4 : 0.15),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
               ),
             ],
           ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                CachedNetworkImage(
+                  imageUrl: widget.thumbnailUrl,
+                  fit: BoxFit.cover,
+                  placeholder: (_, __) => Container(
+                    color: isDark ? AppColors.cardDark : Colors.grey[200],
+                  ),
+                  errorWidget: (_, __, ___) => Container(
+                    color: isDark ? AppColors.cardDark : Colors.grey[200],
+                    child: const Icon(Icons.image_not_supported),
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withValues(alpha: 0.8),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 16,
+                  left: 16,
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryBlue,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          widget.category.toUpperCase(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ),
+                      if (widget.isLive == true) ...[
+                        const SizedBox(width: 8),
+                        LiveBadge(isLive: true),
+                      ],
+                    ],
+                  ),
+                ),
+                Positioned(
+                  bottom: 20,
+                  left: 20,
+                  right: 20,
+                  child: Text(
+                    widget.title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      height: 1.3,
+                    ),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Positioned(
+                  bottom: 8,
+                  left: 20,
+                  right: 20,
+                  child: Row(children: [_chip(Icons.schedule, timeAgo(widget.publishedDate, context))]),
+                ),
+              ],
+            ),
+          ),
         ),
-      ),
       ),
     );
   }
@@ -342,7 +337,6 @@ class _TechPulseNewsCardState extends State<TechPulseNewsCard> {
                     Text(
                       widget.title,
                       style: TextStyle(
-                        fontFamily: 'Merriweather',
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
                         color: isDark
@@ -354,7 +348,7 @@ class _TechPulseNewsCardState extends State<TechPulseNewsCard> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      _getTimeAgo(),
+                      timeAgo(widget.publishedDate, context),
                       style: TextStyle(
                         color: isDark
                             ? AppColors.textSecondaryDark
@@ -472,7 +466,7 @@ class _TechPulseNewsCardState extends State<TechPulseNewsCard> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      _getTimeAgo(),
+                      timeAgo(widget.publishedDate, context),
                       style: TextStyle(
                         color: isDark
                             ? AppColors.textSecondaryDark

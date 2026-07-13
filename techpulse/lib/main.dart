@@ -10,7 +10,9 @@ import 'services/connectivity_service/connectivity_service.dart';
 import 'services/notification_service/notification_service.dart';
 import 'navigation/app_router.dart';
 import 'presentation/providers/theme_provider.dart';
+import 'presentation/providers/locale_provider.dart';
 import 'presentation/providers/article_providers.dart';
+import 'l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -124,13 +126,17 @@ class _TechPulseAppState extends ConsumerState<TechPulseApp> {
   @override
   Widget build(BuildContext context) {
     final themeMode = ref.watch(themeModeProvider);
+    final locale = ref.watch(localeProvider);
 
     return MaterialApp.router(
       scaffoldMessengerKey: _scaffoldMessengerKey,
-      title: 'TechPulse',
+      title: 'ZenaTech',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      locale: locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      theme: AppTheme.lightTheme(locale),
+      darkTheme: AppTheme.darkTheme(locale),
       themeMode: themeMode,
       routerConfig: appRouter,
     );

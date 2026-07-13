@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
+import '../../l10n/app_localizations.dart';
 
 class ErrorDisplay extends StatelessWidget {
-  final String message;
+  final String? message;
   final VoidCallback? onRetry;
   final IconData icon;
 
   const ErrorDisplay({
     super.key,
-    this.message = 'Something went wrong',
+    this.message,
     this.onRetry,
     this.icon = Icons.error_outline,
   });
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final isOffline =
-        message.toLowerCase().contains('internet') ||
-        message.toLowerCase().contains('offline') ||
-        message.toLowerCase().contains('network');
+    final isOffline = message != null && (
+        message!.toLowerCase().contains('internet') ||
+        message!.toLowerCase().contains('offline') ||
+        message!.toLowerCase().contains('network'));
 
     return Center(
       child: Padding(
@@ -43,7 +45,7 @@ class ErrorDisplay extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              isOffline ? "You're offline" : message,
+              isOffline ? l10n.errorOffline : (message ?? l10n.errorSomethingWrong),
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: isDark
@@ -56,7 +58,7 @@ class ErrorDisplay extends StatelessWidget {
             if (isOffline) ...[
               const SizedBox(height: 8),
               Text(
-                'Please check your connection and try again',
+                l10n.errorOfflineSubtitle,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: isDark
@@ -71,7 +73,7 @@ class ErrorDisplay extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: const Text('Retry'),
+                label: Text(l10n.btnRetry),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.vibrantCyan,
                   foregroundColor: Colors.white,
@@ -96,6 +98,7 @@ class NetworkErrorDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Center(
@@ -119,7 +122,7 @@ class NetworkErrorDisplay extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              'No Internet Connection',
+              l10n.errorNoInternetConnection,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: isDark
@@ -131,7 +134,7 @@ class NetworkErrorDisplay extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Please check your network and try again',
+              l10n.errorNetworkSubtitle,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: isDark
@@ -145,7 +148,7 @@ class NetworkErrorDisplay extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: const Text('Try Again'),
+                label: Text(l10n.btnTryAgain),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.vibrantCyan,
                   foregroundColor: Colors.white,

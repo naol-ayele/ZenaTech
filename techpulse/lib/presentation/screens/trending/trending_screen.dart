@@ -6,11 +6,14 @@ import 'package:dio/dio.dart';
 import '../../providers/article_providers.dart';
 import '../../providers/favorites_providers.dart';
 import '../../widgets/banner_ad_widget.dart';
+import '../../widgets/native_ad_widget.dart';
 import '../../widgets/sliver_error_widget.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/user_service.dart';
 import '../../../core/constants/api_constants.dart';
+import '../../../core/utils/time_ago.dart';
 import '../../../domain/entities/article.dart';
+import 'package:techpulse/l10n/app_localizations.dart';
 
 class TrendingScreen extends ConsumerWidget {
   const TrendingScreen({super.key});
@@ -45,15 +48,8 @@ class TrendingScreen extends ConsumerWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'Trending',
-                      style: TextStyle(
-                        fontFamily: 'Merriweather',
-                        color: isDark
-                            ? AppColors.textPrimaryDark
-                            : AppColors.textPrimaryLight,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      AppLocalizations.of(context)!.navTrending,
+                      style: Theme.of(context).textTheme.headlineLarge,
                     ),
                   ],
                 ),
@@ -75,15 +71,8 @@ class TrendingScreen extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
                 child: Text(
-                  'Top Charts',
-                  style: TextStyle(
-                    fontFamily: 'Merriweather',
-                    color: isDark
-                        ? AppColors.textPrimaryDark
-                        : AppColors.textPrimaryLight,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  AppLocalizations.of(context)!.sectionTopCharts,
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
               ),
             ),
@@ -97,14 +86,14 @@ class TrendingScreen extends ConsumerWidget {
                 isDark: isDark,
               ),
               data: (articles) => articles.isEmpty
-                  ? const SliverFillRemaining(
+                  ? SliverFillRemaining(
                       child: Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.whatshot_outlined, size: 64),
-                            SizedBox(height: 16),
-                            Text('No trending articles'),
+                            const Icon(Icons.whatshot_outlined, size: 64),
+                            const SizedBox(height: 16),
+                            Text(AppLocalizations.of(context)!.emptyNoTrending),
                           ],
                         ),
                       ),
@@ -113,6 +102,9 @@ class TrendingScreen extends ConsumerWidget {
                       delegate: SliverChildBuilderDelegate((context, index) {
                         // Ad slot every 4th item (indices 3, 7, 11...)
                         if (index > 0 && index % 4 == 3) {
+                          if (index == 3 || index == 7) {
+                            return NativeAdWidget(isDark: isDark);
+                          }
                           return const Padding(
                             padding: EdgeInsets.only(bottom: 8),
                             child: BannerAdWidget(),
@@ -155,7 +147,7 @@ class TrendingScreen extends ConsumerWidget {
     bool isCompact = false,
   }) {
     final minRead = _calculateReadTime(article.content);
-    final timeAgo = _getTimeAgo(article.publishedDate);
+    final timeAgoStr = timeAgo(article.publishedDate, context);
     final isFavoriteAsync = ref.watch(isFavoriteProvider(article.id));
     final isFavorite = isFavoriteAsync.maybeWhen(
       data: (fav) => fav,
@@ -168,9 +160,7 @@ class TrendingScreen extends ConsumerWidget {
 
         // Track view
         try {
-          final dio = Dio(
-            BaseOptions(baseUrl: ApiConstants.baseUrl),
-          );
+          final dio = Dio(BaseOptions(baseUrl: ApiConstants.baseUrl));
           await dio.patch('/articles/${article.id}/view');
         } catch (e) {
           debugPrint('View tracking error: $e');
@@ -293,12 +283,12 @@ class TrendingScreen extends ConsumerWidget {
                   children: [
                     _buildMetadataChip(
                       Icons.schedule,
-                      '$minRead min read',
+                      AppLocalizations.of(context)!.labelMinRead(minRead),
                       isCompact: isCompact,
                     ),
                     const Spacer(),
                     Text(
-                      timeAgo,
+                      timeAgoStr,
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.8),
                         fontSize: isCompact ? 10 : 12,
@@ -347,23 +337,6 @@ class TrendingScreen extends ConsumerWidget {
     final wordCount = content.split(RegExp(r'\s+')).length;
     final minutes = (wordCount / 200).ceil();
     return minutes < 1 ? 1 : minutes;
-  }
-
-  String _getTimeAgo(DateTime date) {
-    final now = DateTime.now();
-    final diff = now.difference(date);
-
-    if (diff.inMinutes < 1) {
-      return 'Just now';
-    } else if (diff.inMinutes < 60) {
-      return '${diff.inMinutes}m ago';
-    } else if (diff.inHours < 24) {
-      return '${diff.inHours}h ago';
-    } else if (diff.inDays < 7) {
-      return '${diff.inDays}d ago';
-    } else {
-      return '${date.day}/${date.month}/${date.year}';
-    }
   }
 
   Color _getRankColor(int rank) {

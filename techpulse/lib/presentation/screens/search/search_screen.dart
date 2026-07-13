@@ -6,6 +6,7 @@ import '../../providers/search_history_provider.dart';
 import '../../widgets/empty_state_widget.dart';
 import '../../widgets/error_widget.dart';
 import '../../../core/theme/app_theme.dart';
+import 'package:techpulse/l10n/app_localizations.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
@@ -57,14 +58,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             flexibleSpace: FlexibleSpaceBar(
               titlePadding: const EdgeInsets.only(left: 20, bottom: 16),
               title: Text(
-                'Search',
-                style: TextStyle(
-                  color: isDark
-                      ? AppColors.textPrimaryDark
-                      : AppColors.textPrimaryLight,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+                AppLocalizations.of(context)!.screenSearch,
+                style: Theme.of(context).textTheme.headlineLarge,
               ),
             ),
           ),
@@ -89,7 +84,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   controller: _searchController,
                   focusNode: _focusNode,
                   decoration: InputDecoration(
-                    hintText: 'Search articles...',
+                    hintText: AppLocalizations.of(context)!.searchHintArticles,
                     prefixIcon: const Icon(Icons.search),
                     suffixIcon: _searchController.text.isNotEmpty
                         ? IconButton(
@@ -123,14 +118,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Recent Searches',
-                      style: TextStyle(
-                        color: isDark
-                            ? AppColors.textPrimaryDark
-                            : AppColors.textPrimaryLight,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      AppLocalizations.of(context)!.sectionRecentSearches,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     searchHistory.maybeWhen(
                       data: (history) => history.isNotEmpty
@@ -138,7 +127,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                               onPressed: () => ref
                                   .read(searchHistoryNotifierProvider.notifier)
                                   .clearHistory(),
-                              child: const Text('Clear all'),
+                              child: Text(AppLocalizations.of(context)!.btnClearAll),
                             )
                           : const SizedBox.shrink(),
                       orElse: () => const SizedBox.shrink(),
@@ -159,7 +148,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                         padding: const EdgeInsets.all(32),
                         child: Center(
                           child: Text(
-                            'No recent searches',
+                            AppLocalizations.of(context)!.emptyNoSearches,
                             style: TextStyle(
                               color: isDark
                                   ? AppColors.textSecondaryDark
@@ -191,7 +180,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               ),
               error: (e, _) => SliverFillRemaining(
                 child: ErrorDisplay(
-                  message: 'Search failed',
+                  message: AppLocalizations.of(context)!.errorSearchFailed,
                   onRetry: () => ref.invalidate(searchArticlesProvider(_query)),
                 ),
               ),
@@ -215,9 +204,10 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                               article.title,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.titleMedium,
                             ),
                             subtitle: Text(article.category),
-                            trailing: Text('${article.views} views'),
+                            trailing: Text(AppLocalizations.of(context)!.labelViews(article.views)),
                           ),
                         );
                       }, childCount: articles.length),

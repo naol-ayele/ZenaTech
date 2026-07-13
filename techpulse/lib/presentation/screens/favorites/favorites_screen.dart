@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../providers/favorites_providers.dart';
 import '../../widgets/sliver_error_widget.dart';
 import '../../../core/theme/app_theme.dart';
+import 'package:techpulse/l10n/app_localizations.dart';
 
 class FavoritesScreen extends ConsumerWidget {
   const FavoritesScreen({super.key});
@@ -26,14 +27,8 @@ class FavoritesScreen extends ConsumerWidget {
             flexibleSpace: FlexibleSpaceBar(
               titlePadding: const EdgeInsets.only(left: 20, bottom: 16),
               title: Text(
-                'Favorites',
-                style: TextStyle(
-                  color: isDark
-                      ? AppColors.textPrimaryDark
-                      : AppColors.textPrimaryLight,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+                AppLocalizations.of(context)!.screenFavorites,
+                style: Theme.of(context).textTheme.headlineLarge,
               ),
             ),
           ),
@@ -70,7 +65,7 @@ class FavoritesScreen extends ConsumerWidget {
                           ),
                           const SizedBox(height: 24),
                           Text(
-                            'No favorites yet',
+                            AppLocalizations.of(context)!.emptyNoFavorites,
                             style: TextStyle(
                               color: isDark
                                   ? AppColors.textPrimaryDark
@@ -81,7 +76,7 @@ class FavoritesScreen extends ConsumerWidget {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Start saving articles you love',
+                            AppLocalizations.of(context)!.emptySubtitleSaveArticles,
                             style: TextStyle(
                               color: isDark
                                   ? AppColors.textSecondaryDark

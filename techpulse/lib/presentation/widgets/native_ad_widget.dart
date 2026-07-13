@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/ads/ad_manager.dart';
+import '../../l10n/app_localizations.dart';
 
 class NativeAdWidget extends StatefulWidget {
   final bool isDark;
@@ -66,6 +67,7 @@ class _NativeAdWidgetState extends State<NativeAdWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     if (_adFailed) {
       return const SizedBox.shrink();
     }
@@ -106,7 +108,7 @@ class _NativeAdWidgetState extends State<NativeAdWidget> {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        'Sponsored',
+                        l10n.badgeSponsored,
                         style: TextStyle(
                           color: widget.isDark
                               ? AppColors.vibrantCyan
@@ -126,9 +128,9 @@ class _NativeAdWidgetState extends State<NativeAdWidget> {
                         color: Colors.grey[400],
                         borderRadius: BorderRadius.circular(2),
                       ),
-                      child: const Text(
-                        'Ad',
-                        style: TextStyle(
+                      child: Text(
+                        l10n.badgeAdShort,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 8,
                           fontWeight: FontWeight.bold,
@@ -144,7 +146,7 @@ class _NativeAdWidgetState extends State<NativeAdWidget> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Advertisement',
+                  l10n.labelAdvertisement,
                   style: TextStyle(
                     color: widget.isDark
                         ? AppColors.textSecondaryDark
@@ -159,6 +161,7 @@ class _NativeAdWidgetState extends State<NativeAdWidget> {
   }
 
   Widget _buildPlaceholder() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -173,7 +176,7 @@ class _NativeAdWidgetState extends State<NativeAdWidget> {
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
-                'Sponsored',
+                l10n.badgeSponsored,
                 style: TextStyle(
                   color: widget.isDark
                       ? AppColors.vibrantCyan
@@ -190,9 +193,9 @@ class _NativeAdWidgetState extends State<NativeAdWidget> {
                 color: Colors.grey[400],
                 borderRadius: BorderRadius.circular(2),
               ),
-              child: const Text(
-                'Ad',
-                style: TextStyle(
+              child: Text(
+                l10n.badgeAdShort,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 8,
                   fontWeight: FontWeight.bold,
@@ -219,7 +222,7 @@ class _NativeAdWidgetState extends State<NativeAdWidget> {
         ),
         const SizedBox(height: 8),
         Text(
-          'Advertisement',
+          l10n.labelAdvertisement,
           style: TextStyle(
             color: widget.isDark
                 ? AppColors.textSecondaryDark

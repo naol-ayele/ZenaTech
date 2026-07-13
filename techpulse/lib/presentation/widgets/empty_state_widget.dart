@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
+import '../../l10n/app_localizations.dart';
 
 class EmptyStateWidget extends StatelessWidget {
   final String title;
@@ -16,11 +17,12 @@ class EmptyStateWidget extends StatelessWidget {
   });
 
   factory EmptyStateWidget.favorites(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return EmptyStateWidget(
       icon: Icons.favorite_outline,
-      title: 'No favorites yet',
-      subtitle: 'Start saving articles you love',
+      title: l10n.emptyNoFavorites,
+      subtitle: l10n.emptySubtitleSaveArticles,
       action: Container(
         width: 64,
         height: 64,
@@ -38,26 +40,29 @@ class EmptyStateWidget extends StatelessWidget {
   }
 
   factory EmptyStateWidget.search(BuildContext context) {
-    return const EmptyStateWidget(
+    final l10n = AppLocalizations.of(context)!;
+    return EmptyStateWidget(
       icon: Icons.search_off,
-      title: 'No results found',
-      subtitle: 'Try a different search term',
+      title: l10n.emptyNoResults,
+      subtitle: l10n.emptySubtitleTryDifferent,
     );
   }
 
   factory EmptyStateWidget.articles(BuildContext context) {
-    return const EmptyStateWidget(
+    final l10n = AppLocalizations.of(context)!;
+    return EmptyStateWidget(
       icon: Icons.article_outlined,
-      title: 'No articles yet',
-      subtitle: 'Check back later for new content',
+      title: l10n.emptyNoArticles,
+      subtitle: l10n.emptySubtitleCheckBack,
     );
   }
 
   factory EmptyStateWidget.category(BuildContext context) {
-    return const EmptyStateWidget(
+    final l10n = AppLocalizations.of(context)!;
+    return EmptyStateWidget(
       icon: Icons.folder_outlined,
-      title: 'No articles in this category',
-      subtitle: 'Check back later',
+      title: l10n.emptyCategoryEmpty,
+      subtitle: l10n.emptySubtitleCheckBackCategory,
     );
   }
 

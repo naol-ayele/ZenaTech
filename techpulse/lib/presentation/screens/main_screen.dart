@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
+import 'package:techpulse/l10n/app_localizations.dart';
 
 class MainScreen extends ConsumerWidget {
   final Widget child;
@@ -21,31 +22,31 @@ class MainScreen extends ConsumerWidget {
             ? AppColors.surfaceDark
             : AppColors.surfaceLight,
         indicatorColor: AppColors.vibrantCyan.withValues(alpha: 0.2),
-        destinations: const [
+        destinations: [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),
             selectedIcon: Icon(Icons.home),
-            label: 'Home',
+            label: AppLocalizations.of(context)!.navHome,
           ),
           NavigationDestination(
             icon: Icon(Icons.explore_outlined),
             selectedIcon: Icon(Icons.explore),
-            label: 'Explore',
+            label: AppLocalizations.of(context)!.navExplore,
           ),
           NavigationDestination(
             icon: Icon(Icons.whatshot_outlined),
             selectedIcon: Icon(Icons.whatshot),
-            label: 'Trending',
+            label: AppLocalizations.of(context)!.navTrending,
           ),
           NavigationDestination(
             icon: Icon(Icons.favorite_outline),
             selectedIcon: Icon(Icons.favorite),
-            label: 'Favorite',
+            label: AppLocalizations.of(context)!.navFavorite,
           ),
           NavigationDestination(
             icon: Icon(Icons.settings_outlined),
             selectedIcon: Icon(Icons.settings),
-            label: 'Settings',
+            label: AppLocalizations.of(context)!.navSettings,
           ),
         ],
       ),

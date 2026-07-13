@@ -1,0 +1,152 @@
+{
+  "@@locale": "en",
+
+  "navHome": "Home",
+  "navExplore": "Explore",
+  "navTrending": "Trending",
+  "navFavorite": "Favorite",
+  "navSettings": "Settings",
+
+  "screenSearch": "Search",
+  "screenFavorites": "Favorites",
+  "screenCategories": "Categories",
+
+  "sectionTrendingNow": "Trending Now",
+  "sectionLatestNews": "Latest News",
+  "sectionTopCharts": "Top Charts",
+  "sectionRecentSearches": "Recent Searches",
+  "sectionAppearance": "Appearance",
+  "sectionAbout": "About",
+  "sectionAffiliateLinks": "Affiliate Links",
+  "sectionLanguage": "Language",
+
+  "labelDarkMode": "Dark Mode",
+  "labelCurrentlyDark": "Currently dark",
+  "labelCurrentlyLight": "Currently light",
+  "labelVersion": "Version",
+  "labelDeveloper": "Developer",
+  "labelPrivacyPolicy": "Privacy Policy",
+
+  "badgeLive": "LIVE",
+  "badgeNew": "NEW",
+  "badgeTrending": "Trending",
+  "badgePremium": "PREMIUM",
+  "badgePremiumContent": "Premium Content",
+  "badgeSponsored": "Sponsored",
+
+  "badgeAdShort": "Ad",
+  "labelAdvertisement": "Advertisement",
+  "labelDeepDive": "Deep Dive",
+  "labelFeatured": "Featured",
+  "labelMinRead": "{minutes} min read",
+  "@labelMinRead": {
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+  "labelViews": "{count} views",
+  "@labelViews": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "labelArticles": "{count} articles",
+  "@labelArticles": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "emptyNoTrending": "No trending articles",
+  "emptyNoFavorites": "No favorites yet",
+  "emptyNoSearches": "No recent searches",
+  "emptyNoResults": "No results found",
+  "emptyNoArticles": "No articles yet",
+  "emptySubtitleSaveArticles": "Start saving articles you love",
+  "emptySubtitleTryDifferent": "Try a different search term",
+  "emptySubtitleCheckBack": "Check back later for new content",
+  "emptySubtitleCheckBackCategory": "Check back later",
+  "emptyCategoryEmpty": "No articles in this category",
+
+  "errorOffline": "You're offline",
+  "errorServerUnavailable": "Server unavailable",
+  "errorSomethingWrong": "Something went wrong",
+  "errorNoInternetConnection": "No Internet Connection",
+  "errorSearchFailed": "Search failed",
+  "errorLoadingHistory": "Error loading history",
+  "errorFailedToLoadTrending": "Failed to load trending",
+  "errorFailedToLoadArticles": "Failed to load articles",
+
+  "errorOfflineSubtitle": "Please check your connection and try again",
+  "errorServerSubtitle": "Pull down to refresh",
+  "errorNetworkSubtitle": "Please check your network and try again",
+  "errorRetrySubtitle": "Tap retry to load again",
+
+  "btnRetry": "Retry",
+  "btnTryAgain": "Try Again",
+  "btnClearAll": "Clear all",
+  "btnCancel": "Cancel",
+  "btnWatchAd": "Watch Ad",
+  "btnWatchVideo": "Watch Video",
+  "btnUnlockAd": "Unlock via Ad",
+
+  "promptWatchAd": "Watch a short ad to continue reading",
+  "promptUnlockPremium": "Unlock Premium Content",
+  "promptWatchVideo": "Watch a short video to unlock this article for free!",
+  "promptUnlock": "Unlock to read the full article",
+  "promptContinueAd": "Continue reading by watching a short ad...",
+  "contentUnlocked": "Content unlocked!",
+
+  "searchHintArticles": "Search articles...",
+  "searchHintTopics": "Search articles, topics...",
+
+  "connectionRestored": "Connection restored. Refreshing content...",
+
+  "timeJustNow": "Just now",
+  "timeMinutesAgo": "{minutes}m ago",
+  "@timeMinutesAgo": {
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+  "timeHoursAgo": "{hours}h ago",
+  "@timeHoursAgo": {
+    "placeholders": {
+      "hours": { "type": "int" }
+    }
+  },
+  "timeDaysAgo": "{days}d ago",
+  "@timeDaysAgo": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
+
+  "categoryAll": "All",
+  "categoryProgramming": "Programming",
+  "categoryMobile": "Mobile",
+  "categoryAiMl": "AI & ML",
+  "categorySecurity": "Security",
+  "categoryCloud": "Cloud",
+  "categoryTechnology": "Technology",
+  "categoryWebDev": "Web Dev",
+  "categoryDevOps": "DevOps",
+  "categoryData": "Data",
+  "categorySports": "Sports",
+  "categoryBusiness": "Business",
+  "categoryEntertainment": "Entertainment",
+
+  "version": "1.0.0",
+
+  "channelName": "ZenaTech Notifications",
+  "channelDescription": "Notifications from ZenaTech",
+
+  "semanticsRemoveFavorite": "Remove from favorites",
+  "semanticsAddFavorite": "Add to favorites",
+  "semanticsReadArticle": "Read article: {title}",
+  "@semanticsReadArticle": {
+    "placeholders": {
+      "title": { "type": "String" }
+    }
+  }
+}

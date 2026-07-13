@@ -12,6 +12,7 @@ import '../../widgets/native_ad_widget.dart';
 import '../../widgets/sliver_error_widget.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/user_service.dart';
+import 'package:techpulse/l10n/app_localizations.dart';
 
 final selectedHomeCategoryProvider = StateProvider<String?>((ref) => null);
 
@@ -59,15 +60,8 @@ class HomeScreen extends ConsumerWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'TechPulse',
-                      style: TextStyle(
-                        fontFamily: 'Merriweather',
-                        color: isDark
-                            ? AppColors.textPrimaryDark
-                            : AppColors.textPrimaryLight,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      'ZenaTech',
+                      style: Theme.of(context).textTheme.headlineLarge,
                     ),
                   ],
                 ),
@@ -102,7 +96,7 @@ class HomeScreen extends ConsumerWidget {
                 loading: () => const SizedBox.shrink(),
                 error: (_, __) => const SizedBox.shrink(),
                 data: (categories) {
-                  final allCategories = ['All', ...categories.map((c) => c.id)];
+                  final allCategories = [AppLocalizations.of(context)!.categoryAll, ...categories.map((c) => c.id)];
                   return Padding(
                     padding: const EdgeInsets.only(top: 16),
                     child: Column(
@@ -128,15 +122,8 @@ class HomeScreen extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
                 child: Text(
-                  'Trending Now',
-                  style: TextStyle(
-                    fontFamily: 'Merriweather',
-                    color: isDark
-                        ? AppColors.textPrimaryDark
-                        : AppColors.textPrimaryLight,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      AppLocalizations.of(context)!.sectionTrendingNow,
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
               ),
             ),
@@ -148,7 +135,7 @@ class HomeScreen extends ConsumerWidget {
                       const Center(child: CircularProgressIndicator()),
                   error: (error, stack) => Center(
                     child: Text(
-                      'Failed to load trending',
+                      AppLocalizations.of(context)!.errorFailedToLoadTrending,
                       style: TextStyle(
                         color: isDark
                             ? AppColors.textSecondaryDark
@@ -159,7 +146,7 @@ class HomeScreen extends ConsumerWidget {
                   data: (articles) => articles.isEmpty
                       ? Center(
                           child: Text(
-                            'No trending articles',
+                            AppLocalizations.of(context)!.emptyNoTrending,
                             style: TextStyle(
                               color: isDark
                                   ? AppColors.textSecondaryDark
@@ -195,16 +182,9 @@ class HomeScreen extends ConsumerWidget {
                 padding: const EdgeInsets.fromLTRB(20, 24, 20, 10),
                 child: Text(
                   selectedCategory == null || selectedCategory == 'All'
-                      ? 'Latest News'
-                      : _formatCategoryName(selectedCategory),
-                  style: TextStyle(
-                    fontFamily: 'Merriweather',
-                    color: isDark
-                        ? AppColors.textPrimaryDark
-                        : AppColors.textPrimaryLight,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      ? AppLocalizations.of(context)!.sectionLatestNews
+                      : _formatCategoryName(context, selectedCategory),
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
               ),
             ),
@@ -245,7 +225,7 @@ class HomeScreen extends ConsumerWidget {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            'No articles in this category',
+                            AppLocalizations.of(context)!.emptyCategoryEmpty,
                             style: TextStyle(
                               color: isDark
                                   ? AppColors.textPrimaryDark
@@ -304,14 +284,15 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  String _formatCategoryName(String id) {
+  String _formatCategoryName(BuildContext context, String id) {
+    final l10n = AppLocalizations.of(context)!;
     final names = {
-      'programming': 'Programming',
-      'mobile': 'Mobile',
-      'ai': 'AI & ML',
-      'security': 'Security',
-      'cloud': 'Cloud',
-      'tech': 'Technology',
+      'programming': l10n.categoryProgramming,
+      'mobile': l10n.categoryMobile,
+      'ai': l10n.categoryAiMl,
+      'security': l10n.categorySecurity,
+      'cloud': l10n.categoryCloud,
+      'tech': l10n.categoryTechnology,
     };
     return names[id] ?? id;
   }

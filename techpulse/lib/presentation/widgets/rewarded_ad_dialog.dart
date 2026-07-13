@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/ads/ad_manager.dart';
+import '../../l10n/app_localizations.dart';
 
 class RewardedAdDialog extends StatelessWidget {
   final VoidCallback? onUnlock;
@@ -17,6 +18,7 @@ class RewardedAdDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Dialog(
@@ -42,7 +44,7 @@ class RewardedAdDialog extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              'Unlock Premium Content',
+              l10n.promptUnlockPremium,
               style: TextStyle(
                 color: isDark
                     ? AppColors.textPrimaryDark
@@ -53,7 +55,7 @@ class RewardedAdDialog extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              'Watch a short video to unlock this article for free!',
+              l10n.promptWatchVideo,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: isDark
@@ -77,7 +79,7 @@ class RewardedAdDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text('Cancel'),
+                    child: Text(l10n.btnCancel),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -98,7 +100,7 @@ class RewardedAdDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text('Watch Video'),
+                    child: Text(l10n.btnWatchVideo),
                   ),
                 ),
               ],
@@ -149,6 +151,7 @@ class _PremiumContentGateState extends State<PremiumContentGate> {
   }
 
   Widget _buildUnlockPrompt(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
@@ -166,7 +169,7 @@ class _PremiumContentGateState extends State<PremiumContentGate> {
               const Icon(Icons.lock, color: AppColors.accentPeach),
               const SizedBox(width: 12),
               Text(
-                'Premium Content',
+                l10n.badgePremiumContent,
                 style: TextStyle(
                   color: isDark
                       ? AppColors.textPrimaryDark
@@ -179,7 +182,7 @@ class _PremiumContentGateState extends State<PremiumContentGate> {
           ),
           const SizedBox(height: 12),
           Text(
-            'Unlock to read the full article',
+            l10n.promptUnlock,
             style: TextStyle(
               color: isDark
                   ? AppColors.textSecondaryDark
@@ -192,7 +195,7 @@ class _PremiumContentGateState extends State<PremiumContentGate> {
             child: ElevatedButton.icon(
               onPressed: () => _showUnlockDialog(context),
               icon: const Icon(Icons.play_circle_outline),
-              label: const Text('Unlock via Ad'),
+              label: Text(l10n.btnUnlockAd),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.accentPeach,
                 padding: const EdgeInsets.symmetric(vertical: 14),

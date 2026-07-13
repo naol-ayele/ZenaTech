@@ -6,6 +6,7 @@ class AppColors {
   static const Color slateDark = Color(0xFF0F172A);
   static const Color vibrantCyan = Color(0xFF06B6D4);
   static const Color accentPeach = Color(0xFFFF6B6B);
+  static const Color accent = Color(0xFFe8a34c);
 
   static const Color surfaceLight = Color(0xFFFAFAFA);
   static const Color surfaceDark = Color(0xFF0F172A);
@@ -26,7 +27,10 @@ class AppColors {
 }
 
 class AppTheme {
-  static ThemeData get lightTheme {
+  static bool _useFraunces(Locale locale) =>
+      locale.languageCode != 'am';
+
+  static ThemeData lightTheme(Locale locale) {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
@@ -64,28 +68,54 @@ class AppTheme {
         elevation: 8,
       ),
       textTheme: TextTheme(
-        displayLarge: GoogleFonts.merriweather(
-          fontSize: 32,
-          fontWeight: FontWeight.bold,
-          color: AppColors.textPrimaryLight,
-          letterSpacing: -0.5,
-        ),
-        displayMedium: GoogleFonts.merriweather(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: AppColors.textPrimaryLight,
-          height: 1.3,
-        ),
-        headlineLarge: GoogleFonts.merriweather(
-          fontSize: 22,
-          fontWeight: FontWeight.w600,
-          color: AppColors.textPrimaryLight,
-        ),
-        headlineMedium: GoogleFonts.merriweather(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: AppColors.textPrimaryLight,
-        ),
+        displayLarge: _useFraunces(locale)
+            ? GoogleFonts.fraunces(
+                fontSize: 32,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimaryLight,
+                letterSpacing: -0.5,
+              )
+            : const TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimaryLight,
+                letterSpacing: -0.5,
+              ),
+        displayMedium: _useFraunces(locale)
+            ? GoogleFonts.fraunces(
+                fontSize: 26,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimaryLight,
+                height: 1.3,
+              )
+            : const TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimaryLight,
+                height: 1.3,
+              ),
+        headlineLarge: _useFraunces(locale)
+            ? GoogleFonts.fraunces(
+                fontSize: 22,
+                fontWeight: FontWeight.w500,
+                color: AppColors.textPrimaryLight,
+              )
+            : const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w500,
+                color: AppColors.textPrimaryLight,
+              ),
+        headlineMedium: _useFraunces(locale)
+            ? GoogleFonts.fraunces(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: AppColors.textPrimaryLight,
+              )
+            : const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: AppColors.textPrimaryLight,
+              ),
         titleLarge: GoogleFonts.inter(
           fontSize: 18,
           fontWeight: FontWeight.w600,
@@ -144,7 +174,7 @@ class AppTheme {
     );
   }
 
-  static ThemeData get darkTheme {
+  static ThemeData darkTheme(Locale locale) {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
@@ -182,28 +212,54 @@ class AppTheme {
         elevation: 8,
       ),
       textTheme: TextTheme(
-        displayLarge: GoogleFonts.merriweather(
-          fontSize: 32,
-          fontWeight: FontWeight.bold,
-          color: AppColors.textPrimaryDark,
-          letterSpacing: -0.5,
-        ),
-        displayMedium: GoogleFonts.merriweather(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: AppColors.textPrimaryDark,
-          height: 1.3,
-        ),
-        headlineLarge: GoogleFonts.merriweather(
-          fontSize: 22,
-          fontWeight: FontWeight.w600,
-          color: AppColors.textPrimaryDark,
-        ),
-        headlineMedium: GoogleFonts.merriweather(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: AppColors.textPrimaryDark,
-        ),
+        displayLarge: _useFraunces(locale)
+            ? GoogleFonts.fraunces(
+                fontSize: 32,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimaryDark,
+                letterSpacing: -0.5,
+              )
+            : const TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimaryDark,
+                letterSpacing: -0.5,
+              ),
+        displayMedium: _useFraunces(locale)
+            ? GoogleFonts.fraunces(
+                fontSize: 26,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimaryDark,
+                height: 1.3,
+              )
+            : const TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimaryDark,
+                height: 1.3,
+              ),
+        headlineLarge: _useFraunces(locale)
+            ? GoogleFonts.fraunces(
+                fontSize: 22,
+                fontWeight: FontWeight.w500,
+                color: AppColors.textPrimaryDark,
+              )
+            : const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w500,
+                color: AppColors.textPrimaryDark,
+              ),
+        headlineMedium: _useFraunces(locale)
+            ? GoogleFonts.fraunces(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: AppColors.textPrimaryDark,
+              )
+            : const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: AppColors.textPrimaryDark,
+              ),
         titleLarge: GoogleFonts.inter(
           fontSize: 18,
           fontWeight: FontWeight.w600,

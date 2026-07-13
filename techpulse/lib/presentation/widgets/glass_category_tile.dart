@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
+import '../../l10n/app_localizations.dart';
 
 class GlassCategoryTile extends StatelessWidget {
   final String name;
@@ -51,6 +52,7 @@ class GlassCategoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final color = _getColor();
 
@@ -105,7 +107,7 @@ class GlassCategoryTile extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              '$articleCount articles',
+              l10n.labelArticles(articleCount),
               style: TextStyle(
                 color: isDark
                     ? AppColors.textSecondaryDark
@@ -170,6 +172,7 @@ class HighContrastCategoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final color = _getColor();
 
@@ -202,7 +205,7 @@ class HighContrastCategoryTile extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              '$articleCount articles',
+              l10n.labelArticles(articleCount),
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.8),
                 fontSize: 12,

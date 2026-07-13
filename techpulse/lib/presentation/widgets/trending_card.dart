@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../core/theme/app_theme.dart';
+import '../../l10n/app_localizations.dart';
+import '../../core/utils/format_views.dart';
 
 class TrendingCard extends StatefulWidget {
   final String title;
@@ -30,6 +32,7 @@ class _TrendingCardState extends State<TrendingCard> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     final compact = widget.isCompact;
     final cardWidth = compact ? 140.0 : 200.0;
@@ -118,7 +121,7 @@ class _TrendingCardState extends State<TrendingCard> {
                         ),
                         SizedBox(width: compact ? 1 : 2),
                         Text(
-                          'Trending',
+                          l10n.badgeTrending,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: badgeFontSize,
@@ -153,7 +156,7 @@ class _TrendingCardState extends State<TrendingCard> {
                         children: [
                           _buildMetadataChip(
                             Icons.visibility,
-                            _formatViews(widget.views),
+                            formatViews(widget.views),
                             Colors.white70,
                             chipIconSize,
                             chipFontSize,
@@ -199,12 +202,4 @@ class _TrendingCardState extends State<TrendingCard> {
     );
   }
 
-  String _formatViews(int views) {
-    if (views >= 1000000) {
-      return '${(views / 1000000).toStringAsFixed(1)}M';
-    } else if (views >= 1000) {
-      return '${(views / 1000).toStringAsFixed(1)}K';
-    }
-    return '$views';
-  }
 }

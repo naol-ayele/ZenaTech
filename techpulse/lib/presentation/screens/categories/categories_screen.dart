@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../providers/category_providers.dart';
 import '../../widgets/glass_category_tile.dart';
 import '../../../core/theme/app_theme.dart';
+import 'package:techpulse/l10n/app_localizations.dart';
 
 class CategoriesScreen extends ConsumerWidget {
   const CategoriesScreen({super.key});
@@ -26,7 +27,7 @@ class CategoriesScreen extends ConsumerWidget {
             flexibleSpace: FlexibleSpaceBar(
               titlePadding: const EdgeInsets.only(left: 20, bottom: 16),
               title: Text(
-                'Categories',
+                AppLocalizations.of(context)!.screenCategories,
                 style: TextStyle(
                   color: isDark
                       ? AppColors.textPrimaryDark
@@ -62,7 +63,7 @@ class CategoriesScreen extends ConsumerWidget {
                       const SizedBox(height: 16),
                       Text(
                         error.toString().contains('No internet connection')
-                            ? "You're offline"
+                            ? AppLocalizations.of(context)!.errorOffline
                             : error.toString().contains('SocketException') ||
                                   error.toString().contains('DioException') ||
                                   error.toString().contains('Connection') ||
@@ -73,8 +74,8 @@ class CategoriesScreen extends ConsumerWidget {
                                     'Connection timed out',
                                   ) ||
                                   error.toString().contains('Failed')
-                            ? 'Server unavailable'
-                            : 'Something went wrong',
+                            ? AppLocalizations.of(context)!.errorServerUnavailable
+                            : AppLocalizations.of(context)!.errorSomethingWrong,
                         style: TextStyle(
                           color: isDark
                               ? AppColors.textPrimaryDark
@@ -86,8 +87,8 @@ class CategoriesScreen extends ConsumerWidget {
                       const SizedBox(height: 8),
                       Text(
                         error.toString().contains('No internet connection')
-                            ? 'Please check your connection and try again'
-                            : 'Pull down to refresh',
+                            ? AppLocalizations.of(context)!.errorOfflineSubtitle
+                            : AppLocalizations.of(context)!.errorServerSubtitle,
                         style: TextStyle(
                           color: isDark
                               ? AppColors.textSecondaryDark
@@ -99,7 +100,7 @@ class CategoriesScreen extends ConsumerWidget {
                       ElevatedButton.icon(
                         onPressed: () => ref.invalidate(categoriesProvider),
                         icon: const Icon(Icons.refresh),
-                        label: const Text('Retry'),
+                        label: Text(AppLocalizations.of(context)!.btnRetry),
                       ),
                     ],
                   ),

@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import '../presentation/screens/splash/splash_screen.dart';
 import '../presentation/screens/main_screen.dart';
 import '../presentation/screens/home/home_screen.dart';
 import '../presentation/screens/explore/explore_screen.dart';
@@ -9,8 +10,12 @@ import '../presentation/screens/article_detail/article_detail_screen.dart';
 import '../presentation/screens/search/search_screen.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/splash',
   routes: [
+    GoRoute(
+      path: '/splash',
+      builder: (context, state) => const SplashScreen(),
+    ),
     ShellRoute(
       builder: (context, state, child) => MainScreen(child: child),
       routes: [

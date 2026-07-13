@@ -1,0 +1,160 @@
+{
+  "@@locale": "am",
+
+  "navHome": "መነሻ ገጽ",
+  "navExplore": "ያስሱ",
+  "@navExplore": {
+    "description": "VERIFY: 'Explore' tab label — consider 'ዳስስ' or 'ቃኝ' as alternatives"
+  },
+  "navTrending": "ወክታዊ",
+  "navFavorite": "የምወዳቸው",
+  "@navFavorite": {
+    "description": "VERIFY: 'Favorite' tab label — means 'my favorites'"
+  },
+  "navSettings": "ቅንብሮች",
+
+  "screenSearch": "ፈልግ",
+  "screenFavorites": "የምወዳቸው",
+  "screenCategories": "ምድቦች",
+
+  "sectionTrendingNow": "አሁን ወክታዊ",
+  "sectionLatestNews": "የቅርብ ዜና",
+  "sectionTopCharts": "ከፍተኛ ደረጃዎች",
+  "sectionRecentSearches": "የቅርብ ፍለጋዎች",
+  "sectionAppearance": "መልክ",
+  "sectionAbout": "ስለ",
+  "sectionAffiliateLinks": "አጋር አገናኞች",
+  "sectionLanguage": "ቋንቋ",
+
+  "labelDarkMode": "ጨለማ ሁነታ",
+  "labelCurrentlyDark": "በአሁኑ ጨለማ",
+  "labelCurrentlyLight": "በአሁኑ ብርሃን",
+  "labelVersion": "ስሪት",
+  "labelDeveloper": "ገንቢ",
+  "labelPrivacyPolicy": "የግላዊነት ፖሊሲ",
+
+  "badgeLive": "ቀጥታ",
+  "badgeNew": "አዲስ",
+  "badgeTrending": "ወክታዊ",
+  "badgePremium": "ፕሪሚየም",
+  "badgePremiumContent": "ፕሪሚየም ይዘት",
+  "badgeSponsored": "ስፖንሰር የተደረገ",
+  "badgeAdShort": "ማስታወቂያ",
+  "labelAdvertisement": "ማስታወቂያ",
+  "labelDeepDive": "ጥልቅ ትንታኔ",
+  "labelFeatured": "የተለየ",
+  "labelMinRead": "{minutes} ደቂቃ ንባብ",
+  "@labelMinRead": {
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+  "labelViews": "{count} እይታዎች",
+  "@labelViews": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "labelArticles": "{count} መጣጥፎች",
+  "@labelArticles": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "emptyNoTrending": "ምንም ወክታዊ መጣጥፎች የሉም",
+  "emptyNoFavorites": "ገና ምንም የምወዳቸው የሉም",
+  "emptyNoSearches": "ምንም የቅርብ ፍለጋዎች የሉም",
+  "emptyNoResults": "ምንም ውጤት አልተገኘም",
+  "emptyNoArticles": "ገና ምንም መጣጥፎች የሉም",
+  "emptySubtitleSaveArticles": "የሚወዷቸውን መጣጥፎች ማስቀመጥ ይጀምሩ",
+  "emptySubtitleTryDifferent": "የተለየ የፍለጋ ቃል ይሞክሩ",
+  "emptySubtitleCheckBack": "ለአዲስ ይዘት በኋላ ይመልሱ",
+  "emptySubtitleCheckBackCategory": "በኋላ ይመልሱ",
+  "emptyCategoryEmpty": "በዚህ ምድብ ውስጥ ምንም መጣጥፎች የሉም",
+
+  "errorOffline": "ከመስመር ውጪ ነዎት",
+  "errorServerUnavailable": "አገልጋይ አይገኝም",
+  "errorSomethingWrong": "የሆነ ችግር ተፈጥሯል",
+  "errorNoInternetConnection": "የበይነመረብ ግንኙነት የለም",
+  "errorSearchFailed": "ፍለጋ አልተሳካም",
+  "errorLoadingHistory": "ታሪክ በመጫን ላይ ስህተት",
+  "errorFailedToLoadTrending": "ወክታዊ መጣጥፎችን መጫን አልተሳካም",
+  "errorFailedToLoadArticles": "መጣጥፎችን መጫን አልተሳካም",
+
+  "errorOfflineSubtitle": "እባክዎ ግንኙነትዎን ያረጋግጡ እና እንደገና ይሞክሩ",
+  "errorServerSubtitle": "ለማደስ ወደ ታች ይጎትቱ",
+  "errorNetworkSubtitle": "እባክዎ አውታረ መረብዎን ያረጋግጡ እና እንደገና ይሞክሩ",
+  "errorRetrySubtitle": "እንደገና ለመሞከር ይንኩ",
+
+  "btnRetry": "እንደገና ሞክር",
+  "btnTryAgain": "እንደገና ሞክር",
+  "btnClearAll": "ሁሉንም አጽዳ",
+  "btnCancel": "ሰርዝ",
+  "btnWatchAd": "ማስታወቂያ ይመልከቱ",
+  "btnWatchVideo": "ቪዲዮ ይመልከቱ",
+  "btnUnlockAd": "በማስታወቂያ ይክፈቱ",
+
+  "promptWatchAd": "ለማንበብ ለመቀጠል አጭር ማስታወቂያ ይመልከቱ",
+  "promptUnlockPremium": "ፕሪሚየም ይዘትን ይክፈቱ",
+  "promptWatchVideo": "ይህን መጣጥፍ በነጻ ለማንበብ አጭር ቪዲዮ ይመልከቱ!",
+  "promptUnlock": "ሙሉ መጣጥፉን ለማንበብ ይክፈቱ",
+  "promptContinueAd": "አጭር ማስታወቂያ በመመልከት ማንበብዎን ይቀጥሉ...",
+  "contentUnlocked": "ይዘት ተከፍቷል!",
+
+  "searchHintArticles": "መጣጥፎችን ይፈልጉ...",
+  "searchHintTopics": "መጣጥፎችን፣ ርዕሶችን ይፈልጉ...",
+
+  "connectionRestored": "ግንኙነት ተመልሷል። ይዘትን በማደስ ላይ...",
+
+  "timeJustNow": "አሁን ያህል",
+  "timeMinutesAgo": "ከ{minutes} ደቂቃ በፊት",
+  "@timeMinutesAgo": {
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+  "timeHoursAgo": "ከ{hours} ሰዓት በፊት",
+  "@timeHoursAgo": {
+    "placeholders": {
+      "hours": { "type": "int" }
+    }
+  },
+  "timeDaysAgo": "ከ{days} ቀን በፊት",
+  "@timeDaysAgo": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
+
+  "categoryAll": "ሁሉም",
+  "categoryProgramming": "ፕሮግራሚንግ",
+  "categoryMobile": "ሞባይል",
+  "categoryAiMl": "AI እና ML",
+  "categorySecurity": "ደህንነት",
+  "categoryCloud": "ክላውድ",
+  "categoryTechnology": "ቴክኖሎጂ",
+  "categoryWebDev": "ዌብ ዴቭ",
+  "categoryDevOps": "ዴቭኦፕስ",
+  "categoryData": "ዳታ",
+  "categorySports": "ስፖርት",
+  "categoryBusiness": "ቢዝነስ",
+  "@categoryBusiness": {
+    "description": "VERIFY: 'Business' category — consider 'ንግድ' or 'ንግድ ሥራ' as alternatives"
+  },
+  "categoryEntertainment": "መዝናኛ",
+
+  "version": "1.0.0",
+
+  "channelName": "ZenaTech ማሳወቂያዎች",
+  "channelDescription": "ከZenaTech የሚላኩ ማሳወቂያዎች",
+
+  "semanticsRemoveFavorite": "ከምወዳቸው አስወግድ",
+  "semanticsAddFavorite": "ወደ ምወዳቸው ጨምር",
+  "semanticsReadArticle": "መጣጥፉን ያንብቡ፦ {title}",
+  "@semanticsReadArticle": {
+    "placeholders": {
+      "title": { "type": "String" }
+    }
+  }
+}

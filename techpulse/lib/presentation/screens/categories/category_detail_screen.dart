@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/article_providers.dart';
 import '../../../core/theme/app_theme.dart';
+import 'package:techpulse/l10n/app_localizations.dart';
 
 class CategoryDetailScreen extends ConsumerWidget {
   final String categoryId;
@@ -15,7 +16,7 @@ class CategoryDetailScreen extends ConsumerWidget {
     final articlesAsync = ref.watch(categoryArticlesProvider(categoryId));
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final categoryName = _getCategoryName(categoryId);
+    final categoryName = _getCategoryName(context, categoryId);
 
     return Scaffold(
       body: CustomScrollView(
@@ -51,11 +52,11 @@ class CategoryDetailScreen extends ConsumerWidget {
                   children: [
                     Icon(Icons.error_outline, size: 64, color: AppColors.error),
                     const SizedBox(height: 16),
-                    Text('Failed to load articles'),
+                    Text(AppLocalizations.of(context)!.errorFailedToLoadArticles),
                     ElevatedButton(
                       onPressed: () =>
                           ref.invalidate(categoryArticlesProvider(categoryId)),
-                      child: const Text('Retry'),
+                      child: Text(AppLocalizations.of(context)!.btnRetry),
                     ),
                   ],
                 ),
@@ -69,7 +70,7 @@ class CategoryDetailScreen extends ConsumerWidget {
                         children: [
                           Icon(Icons.article_outlined, size: 64),
                           const SizedBox(height: 16),
-                          Text('No articles in this category'),
+                          Text(AppLocalizations.of(context)!.emptyCategoryEmpty),
                         ],
                       ),
                     ),
@@ -87,15 +88,16 @@ class CategoryDetailScreen extends ConsumerWidget {
     );
   }
 
-  String _getCategoryName(String id) {
-    const names = {
-      'programming': 'Programming',
-      'mobile': 'Mobile',
-      'ai': 'AI & ML',
-      'security': 'Security',
-      'cloud': 'Cloud',
-    };
-    return names[id] ?? id;
+  String _getCategoryName(BuildContext context, String id) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (id) {
+      case 'programming': return l10n.categoryProgramming;
+      case 'mobile': return l10n.categoryMobile;
+      case 'ai': return l10n.categoryAiMl;
+      case 'security': return l10n.categorySecurity;
+      case 'cloud': return l10n.categoryCloud;
+      default: return id;
+    }
   }
 
   Widget _buildArticleTile(BuildContext context, dynamic article, bool isDark) {

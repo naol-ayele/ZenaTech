@@ -1,7 +1,7 @@
 class ApiConstants {
   static const String baseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'http://10.58.117.161:3000/v1',
+    defaultValue: 'https://zenatech.onrender.com/v1',
   );
   static const String articles = '/articles';
   static const String categories = '/categories';

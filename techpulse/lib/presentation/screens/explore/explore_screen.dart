@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/search_history_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import 'package:techpulse/l10n/app_localizations.dart';
 
 class ExploreScreen extends ConsumerWidget {
   const ExploreScreen({super.key});
@@ -39,14 +40,8 @@ class ExploreScreen extends ConsumerWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'Explore',
-                      style: TextStyle(
-                        color: isDark
-                            ? AppColors.textPrimaryDark
-                            : AppColors.textPrimaryLight,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      AppLocalizations.of(context)!.navExplore,
+                      style: Theme.of(context).textTheme.headlineLarge,
                     ),
                   ],
                 ),
@@ -93,7 +88,7 @@ class ExploreScreen extends ConsumerWidget {
                         ),
                         const SizedBox(width: 12),
                         Text(
-                          'Search articles, topics...',
+                          AppLocalizations.of(context)!.searchHintTopics,
                           style: TextStyle(
                             color: isDark
                                 ? AppColors.textSecondaryDark
@@ -114,14 +109,8 @@ class ExploreScreen extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Recent Searches',
-                      style: TextStyle(
-                        color: isDark
-                            ? AppColors.textPrimaryDark
-                            : AppColors.textPrimaryLight,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      AppLocalizations.of(context)!.sectionRecentSearches,
+                      style: Theme.of(context).textTheme.headlineMedium,
                     ),
                     searchHistory.maybeWhen(
                       data: (history) => history.isNotEmpty
@@ -130,7 +119,7 @@ class ExploreScreen extends ConsumerWidget {
                                   .read(searchHistoryNotifierProvider.notifier)
                                   .clearHistory(),
                               child: Text(
-                                'Clear all',
+                                AppLocalizations.of(context)!.btnClearAll,
                                 style: TextStyle(
                                   color: isDark
                                       ? AppColors.textSecondaryDark
@@ -156,7 +145,7 @@ class ExploreScreen extends ConsumerWidget {
                   padding: const EdgeInsets.all(20),
                   child: Center(
                     child: Text(
-                      'Error loading history',
+                      AppLocalizations.of(context)!.errorLoadingHistory,
                       style: TextStyle(
                         color: isDark
                             ? AppColors.textSecondaryDark
@@ -169,7 +158,7 @@ class ExploreScreen extends ConsumerWidget {
                     ? Padding(
                         padding: const EdgeInsets.all(20),
                         child: Text(
-                          'No recent searches',
+                          AppLocalizations.of(context)!.emptyNoSearches,
                           style: TextStyle(
                             color: isDark
                                 ? AppColors.textSecondaryDark

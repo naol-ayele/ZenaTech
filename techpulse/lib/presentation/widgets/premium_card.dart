@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../core/theme/app_theme.dart';
+import '../../l10n/app_localizations.dart';
 
 class PremiumArticleCard extends StatelessWidget {
   final String title;
@@ -25,6 +26,7 @@ class PremiumArticleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return GestureDetector(
       onTap: onTap,
@@ -95,7 +97,7 @@ class PremiumArticleCard extends StatelessWidget {
                         const SizedBox(width: 4),
                       ],
                       Text(
-                        isPremium ? 'PREMIUM' : category.toUpperCase(),
+                        isPremium ? l10n.badgePremium : category.toUpperCase(),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 10,
@@ -135,7 +137,7 @@ class PremiumArticleCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          '$views views',
+                          l10n.labelViews(views),
                           style: const TextStyle(
                             color: Colors.white70,
                             fontSize: 12,

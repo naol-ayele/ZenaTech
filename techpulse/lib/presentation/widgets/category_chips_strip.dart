@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/services/user_service.dart';
+import '../../l10n/app_localizations.dart';
 
 final selectedCategoryProvider = StateProvider<String?>((ref) => null);
 
@@ -35,7 +36,7 @@ class CategoryChipsStrip extends ConsumerWidget {
             padding: const EdgeInsets.only(right: 8),
             child: FilterChip(
               label: Text(
-                isAll ? 'All' : _formatCategoryName(category),
+                isAll ? AppLocalizations.of(context)!.categoryAll : _formatCategoryName(category, context),
                 style: TextStyle(
                   color: isSelected
                       ? Colors.white
@@ -75,21 +76,22 @@ class CategoryChipsStrip extends ConsumerWidget {
     );
   }
 
-  String _formatCategoryName(String id) {
-    final names = {
-      'programming': 'Programming',
-      'mobile': 'Mobile',
-      'ai': 'AI & ML',
-      'security': 'Security',
-      'cloud': 'Cloud',
-      'web': 'Web Dev',
-      'devops': 'DevOps',
-      'data': 'Data',
-      'tech': 'Technology',
-      'sports': 'Sports',
-      'business': 'Business',
-      'entertainment': 'Entertainment',
-    };
-    return names[id] ?? id;
+  String _formatCategoryName(String id, BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (id) {
+      case 'programming': return l10n.categoryProgramming;
+      case 'mobile': return l10n.categoryMobile;
+      case 'ai': return l10n.categoryAiMl;
+      case 'security': return l10n.categorySecurity;
+      case 'cloud': return l10n.categoryCloud;
+      case 'web': return l10n.categoryWebDev;
+      case 'devops': return l10n.categoryDevOps;
+      case 'data': return l10n.categoryData;
+      case 'tech': return l10n.categoryTechnology;
+      case 'sports': return l10n.categorySports;
+      case 'business': return l10n.categoryBusiness;
+      case 'entertainment': return l10n.categoryEntertainment;
+      default: return id;
+    }
   }
 }

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../providers/theme_provider.dart';
+import '../../providers/locale_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import 'package:techpulse/l10n/app_localizations.dart';
 
 const String _privacyPolicyUrl = 'https://techpulse.app/privacy';
 
@@ -19,6 +21,7 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
+    final locale = ref.watch(localeProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
@@ -34,14 +37,8 @@ class SettingsScreen extends ConsumerWidget {
             flexibleSpace: FlexibleSpaceBar(
               titlePadding: const EdgeInsets.only(left: 20, bottom: 16),
               title: Text(
-                'Settings',
-                style: TextStyle(
-                  color: isDark
-                      ? AppColors.textPrimaryDark
-                      : AppColors.textPrimaryLight,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+                AppLocalizations.of(context)!.navSettings,
+                style: Theme.of(context).textTheme.headlineLarge,
               ),
             ),
           ),
@@ -52,7 +49,7 @@ class SettingsScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Appearance',
+                    AppLocalizations.of(context)!.sectionAppearance,
                     style: TextStyle(
                       color: isDark
                           ? AppColors.textPrimaryDark
@@ -99,7 +96,7 @@ class SettingsScreen extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Dark Mode',
+                                AppLocalizations.of(context)!.labelDarkMode,
                                 style: TextStyle(
                                   color: isDark
                                       ? AppColors.textPrimaryDark
@@ -109,7 +106,7 @@ class SettingsScreen extends ConsumerWidget {
                                 ),
                               ),
                               Text(
-                                isDark ? 'Currently dark' : 'Currently light',
+                                isDark ? AppLocalizations.of(context)!.labelCurrentlyDark : AppLocalizations.of(context)!.labelCurrentlyLight,
                                 style: TextStyle(
                                   color: isDark
                                       ? AppColors.textSecondaryDark
@@ -136,7 +133,62 @@ class SettingsScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 32),
                   Text(
-                    'About',
+                    AppLocalizations.of(context)!.sectionLanguage,
+                    style: TextStyle(
+                      color: isDark
+                          ? AppColors.textPrimaryDark
+                          : AppColors.textPrimaryLight,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: isDark ? AppColors.cardDark : Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(
+                            alpha: isDark ? 0.2 : 0.06,
+                          ),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<Locale>(
+                        value: locale,
+                        isExpanded: true,
+                        icon: Icon(
+                          Icons.language,
+                          color: isDark
+                              ? AppColors.textSecondaryDark
+                              : AppColors.textSecondaryLight,
+                        ),
+                        items: const [
+                          DropdownMenuItem(
+                            value: Locale('en'),
+                            child: Text('English'),
+                          ),
+                          DropdownMenuItem(
+                            value: Locale('am'),
+                            child: Text('አማርኛ'),
+                          ),
+                        ],
+                        onChanged: (locale) {
+                          if (locale != null) {
+                            ref.read(localeProvider.notifier).setLocale(locale);
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  Text(
+                    AppLocalizations.of(context)!.sectionAbout,
                     style: TextStyle(
                       color: isDark
                           ? AppColors.textPrimaryDark
@@ -166,8 +218,8 @@ class SettingsScreen extends ConsumerWidget {
                         _buildSettingItem(
                           context,
                           icon: Icons.info_outline,
-                          title: 'Version',
-                          subtitle: '1.0.0',
+                          title: AppLocalizations.of(context)!.labelVersion,
+                          subtitle: AppLocalizations.of(context)!.version,
                         ),
                         Divider(
                           color: isDark
@@ -177,18 +229,18 @@ class SettingsScreen extends ConsumerWidget {
                         _buildSettingItem(
                           context,
                           icon: Icons.code,
-                          title: 'Developer',
-                          subtitle: 'TechPulse Team',
+                          title: AppLocalizations.of(context)!.labelDeveloper,
+                          subtitle: 'ZenaTech Team',
                         ),
                         Divider(
                           color: isDark
                               ? AppColors.dividerDark
                               : AppColors.dividerLight,
                         ),
-                          _buildSettingItem(
+                        _buildSettingItem(
                           context,
                           icon: Icons.privacy_tip_outlined,
-                          title: 'Privacy Policy',
+                          title: AppLocalizations.of(context)!.labelPrivacyPolicy,
                           onTap: () => _openPrivacyPolicy(context),
                         ),
                       ],
