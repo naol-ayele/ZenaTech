@@ -16,7 +16,7 @@ class ApiConstants {
 }
 
 class AppConstants {
-  static const String appName = 'TechPulse';
+  static const String appName = 'ZenaTech';
   static const String appVersion = '1.0.0';
   static const String favoritesBox = 'favorites_box';
   static const String searchHistoryBox = 'search_history_box';
