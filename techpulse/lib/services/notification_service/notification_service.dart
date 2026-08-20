@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../core/constants/api_constants.dart';
+import '../../core/network/dio_client.dart';
 import '../../l10n/app_localizations_en.dart';
 import '../../navigation/app_router.dart';
 
@@ -29,6 +29,7 @@ class NotificationService {
   static final FlutterLocalNotificationsPlugin _localNotifications =
       FlutterLocalNotificationsPlugin();
   FirebaseMessaging? _messaging;
+  final DioClient _dioClient = DioClient();
   bool _isInitialized = false;
 
   Function(Map<String, dynamic>)? _onMessageHandler;
@@ -38,6 +39,15 @@ class NotificationService {
       FirebaseMessaging.onMessageOpenedApp;
   Future<RemoteMessage?> getInitialMessage() =>
       FirebaseMessaging.instance.getInitialMessage();
+
+  Future<String?> getDeviceToken() async {
+    try {
+      return await _messaging?.getToken();
+    } catch (e) {
+      debugPrint('NotificationService: Failed to get FCM token - $e');
+      return null;
+    }
+  }
 
   Future<void> initialize() async {
     if (_isInitialized) return;
@@ -88,20 +98,20 @@ class NotificationService {
     final token = await _messaging?.getToken();
     if (token != null) {
       debugPrint('NotificationService: FCM Token: $token');
-      await _registerDeviceToken(token);
+      await registerDeviceToken(token);
     }
 
     _messaging?.onTokenRefresh.listen((newToken) {
       debugPrint('NotificationService: Token refreshed: $newToken');
-      _registerDeviceToken(newToken);
+      registerDeviceToken(newToken);
     });
 
     _isInitialized = true;
     debugPrint('NotificationService: Initialized successfully');
   }
 
-  Future<void> requestPermission() async {
-    if (_messaging == null) return;
+  Future<bool> requestPermission() async {
+    if (_messaging == null) return false;
 
     final settings = await _messaging!.requestPermission(
       alert: true,
@@ -113,32 +123,35 @@ class NotificationService {
       sound: true,
     );
 
+    final granted = settings.authorizationStatus ==
+        AuthorizationStatus.authorized;
     debugPrint(
       'NotificationService: Permission status: ${settings.authorizationStatus}',
     );
+    return granted;
   }
 
-  Future<void> _registerDeviceToken(String token) async {
+  Future<void> registerDeviceToken(String token) async {
     try {
-      final dio = Dio(
-        BaseOptions(
-          baseUrl: ApiConstants.baseUrl,
-          connectTimeout: const Duration(
-            milliseconds: ApiConstants.connectionTimeout,
-          ),
-          receiveTimeout: const Duration(
-            milliseconds: ApiConstants.receiveTimeout,
-          ),
-        ),
-      );
-
-      await dio.post(
+      await _dioClient.post(
         ApiConstants.subscribeNotifications,
         data: {'deviceToken': token},
       );
       debugPrint('NotificationService: Token registered with backend');
     } catch (e) {
       debugPrint('NotificationService: Failed to register token - $e');
+    }
+  }
+
+  Future<void> unregisterDeviceToken(String token) async {
+    try {
+      await _dioClient.post(
+        ApiConstants.unsubscribeNotifications,
+        data: {'deviceToken': token},
+      );
+      debugPrint('NotificationService: Token unregistered from backend');
+    } catch (e) {
+      debugPrint('NotificationService: Failed to unregister token - $e');
     }
   }
 

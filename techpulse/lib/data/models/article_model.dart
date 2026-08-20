@@ -57,7 +57,9 @@ class ArticleModel extends Article {
       'thumbnail_url': thumbnailUrl,
       'published_date': publishedDate.toIso8601String(),
       'views': views,
+      'reading_time': readingTime,
       'is_premium': isPremium,
+      'article_type': articleType.name,
       'affiliate_links': affiliateLinks
           .map((e) => AffiliateLinkModel(label: e.label, url: e.url).toJson())
           .toList(),

@@ -57,6 +57,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sectionLanguage => 'Language';
 
   @override
+  String get sectionNotifications => 'Notifications';
+
+  @override
   String get labelDarkMode => 'Dark Mode';
 
   @override
@@ -73,6 +76,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get labelPrivacyPolicy => 'Privacy Policy';
+
+  @override
+  String get labelPushNotifications => 'Push Notifications';
+
+  @override
+  String get labelNotificationsSubtitle =>
+      'Get notified when new articles are published';
 
   @override
   String get badgeLive => 'LIVE';

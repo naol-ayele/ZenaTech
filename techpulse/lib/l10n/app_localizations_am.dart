@@ -57,6 +57,9 @@ class AppLocalizationsAm extends AppLocalizations {
   String get sectionLanguage => 'ቋንቋ';
 
   @override
+  String get sectionNotifications => 'ማሳወቂያዎች';
+
+  @override
   String get labelDarkMode => 'ጨለማ ሁነታ';
 
   @override
@@ -73,6 +76,12 @@ class AppLocalizationsAm extends AppLocalizations {
 
   @override
   String get labelPrivacyPolicy => 'የግላዊነት ፖሊሲ';
+
+  @override
+  String get labelPushNotifications => 'ገፋ ማሳወቂያዎች';
+
+  @override
+  String get labelNotificationsSubtitle => 'አዲስ መጣጥፎች ሲታተሙ ማሳወቂያ ይቀበሉ';
 
   @override
   String get badgeLive => 'ቀጥታ';

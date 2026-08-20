@@ -148,10 +148,13 @@ class TrendingScreen extends ConsumerWidget {
   }) {
     final minRead = _calculateReadTime(article.content);
     final timeAgoStr = timeAgo(article.publishedDate, context);
-    final isFavoriteAsync = ref.watch(isFavoriteProvider(article.id));
-    final isFavorite = isFavoriteAsync.maybeWhen(
-      data: (fav) => fav,
-      orElse: () => false,
+    final isFavorite = ref.watch(
+      isFavoriteProvider(article.id).select(
+        (asyncValue) => asyncValue.maybeWhen(
+          data: (fav) => fav,
+          orElse: () => false,
+        ),
+      ),
     );
 
     return GestureDetector(

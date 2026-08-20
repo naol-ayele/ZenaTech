@@ -14,6 +14,7 @@ services:
       - CORS_ORIGIN=*
       - ADMIN_PASSWORD=hala@123wala
       - SESSION_SECRET=ba15069dd65a15687d76af9eb0ed417df1a46c0f054a9ba70b3c3446faae7dc7
+      - SENTRY_DSN=${SENTRY_DSN}
     depends_on:
       db:
         condition: service_healthy

@@ -25,6 +25,7 @@
   "sectionAbout": "ስለ",
   "sectionAffiliateLinks": "አጋር አገናኞች",
   "sectionLanguage": "ቋንቋ",
+  "sectionNotifications": "ማሳወቂያዎች",
 
   "labelDarkMode": "ጨለማ ሁነታ",
   "labelCurrentlyDark": "በአሁኑ ጨለማ",
@@ -32,6 +33,8 @@
   "labelVersion": "ስሪት",
   "labelDeveloper": "ገንቢ",
   "labelPrivacyPolicy": "የግላዊነት ፖሊሲ",
+  "labelPushNotifications": "ገፋ ማሳወቂያዎች",
+  "labelNotificationsSubtitle": "አዲስ መጣጥፎች ሲታተሙ ማሳወቂያ ይቀበሉ",
 
   "badgeLive": "ቀጥታ",
   "badgeNew": "አዲስ",

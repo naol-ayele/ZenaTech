@@ -35,7 +35,14 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
   Widget build(BuildContext context) {
     final articleAsync = ref.watch(articleDetailProvider(widget.articleId));
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final isFavoriteAsync = ref.watch(isFavoriteProvider(widget.articleId));
+    final isFavorite = ref.watch(
+      isFavoriteProvider(widget.articleId).select(
+        (asyncValue) => asyncValue.maybeWhen(
+          data: (fav) => fav,
+          orElse: () => false,
+        ),
+      ),
+    );
     final isUnlocked = ref.watch(
       adSupportedContentProvider.select(
         (set) => set.contains(widget.articleId),
@@ -177,26 +184,20 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   actions: [
-                    isFavoriteAsync.when(
-                      data: (isFav) {
-                        return Semantics(
-                          button: true,
-                          label: isFav
-                              ? AppLocalizations.of(context)!.semanticsRemoveFavorite
-                              : AppLocalizations.of(context)!.semanticsAddFavorite,
-                          child: IconButton(
-                            icon: Icon(
-                              isFav ? Icons.favorite : Icons.favorite_border,
-                              color: isFav ? Colors.red : Colors.white,
-                            ),
-                            onPressed: () => ref
-                                .read(favoritesNotifierProvider.notifier)
-                                .toggleFavorite(article),
-                          ),
-                        );
-                      },
-                      loading: () => const SizedBox.shrink(),
-                      error: (_, _) => const SizedBox.shrink(),
+                    Semantics(
+                      button: true,
+                      label: isFavorite
+                          ? AppLocalizations.of(context)!.semanticsRemoveFavorite
+                          : AppLocalizations.of(context)!.semanticsAddFavorite,
+                      child: IconButton(
+                        icon: Icon(
+                          isFavorite ? Icons.favorite : Icons.favorite_border,
+                          color: isFavorite ? Colors.red : Colors.white,
+                        ),
+                        onPressed: () => ref
+                            .read(favoritesNotifierProvider.notifier)
+                            .toggleFavorite(article),
+                      ),
                     ),
                   ],
                 ),

@@ -9,11 +9,13 @@ const session = require('express-session');
 const PgSession = require('connect-pg-simple')(session);
 const { pool } = require('./db');
 
-Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-  environment: process.env.NODE_ENV || 'development',
-  tracesSampleRate: 0.2,
-});
+if (process.env.SENTRY_DSN) {
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    environment: process.env.NODE_ENV || 'development',
+    tracesSampleRate: 0.2,
+  });
+}
 
 const app = express();
 
@@ -78,7 +80,7 @@ app.use('/admin', adminRoutes.router);
 
 // Sentry error handler (must be before other error handlers)
 if (process.env.SENTRY_DSN) {
-  app.use(Sentry.Handlers.errorHandler());
+  app.use(Sentry.expressErrorHandler());
 }
 
 // Error handling middleware

@@ -19,6 +19,7 @@
   "sectionAbout": "About",
   "sectionAffiliateLinks": "Affiliate Links",
   "sectionLanguage": "Language",
+  "sectionNotifications": "Notifications",
 
   "labelDarkMode": "Dark Mode",
   "labelCurrentlyDark": "Currently dark",
@@ -26,6 +27,8 @@
   "labelVersion": "Version",
   "labelDeveloper": "Developer",
   "labelPrivacyPolicy": "Privacy Policy",
+  "labelPushNotifications": "Push Notifications",
+  "labelNotificationsSubtitle": "Get notified when new articles are published",
 
   "badgeLive": "LIVE",
   "badgeNew": "NEW",

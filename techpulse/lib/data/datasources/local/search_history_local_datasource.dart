@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:hive/hive.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/errors/exceptions.dart';
@@ -23,10 +25,9 @@ class SearchHistoryLocalDatasourceImpl implements SearchHistoryLocalDatasource {
       final historyBox = await box;
       return historyBox.values
           .map(
-            (jsonString) => SearchQueryModel.fromJson({
-              'query': jsonString.split('|')[0],
-              'timestamp': jsonString.split('|')[1],
-            }),
+            (jsonString) => SearchQueryModel.fromJson(
+              jsonDecode(jsonString) as Map<String, dynamic>,
+            ),
           )
           .toList();
     } catch (e) {
@@ -38,12 +39,11 @@ class SearchHistoryLocalDatasourceImpl implements SearchHistoryLocalDatasource {
   Future<void> addSearchQuery(SearchQueryModel query) async {
     try {
       final historyBox = await box;
-      final key = '${query.query}|${query.timestamp.toIso8601String()}';
-      final queries = historyBox.values.toList();
-      if (queries.length >= AppConstants.maxSearchHistory) {
-        await historyBox.delete(queries.first);
+      if (historyBox.length >= AppConstants.maxSearchHistory) {
+        final keys = historyBox.keys.cast<int>().toList()..sort();
+        await historyBox.delete(keys.first);
       }
-      await historyBox.add(key);
+      await historyBox.add(jsonEncode(query.toJson()));
     } catch (e) {
       throw const CacheException('Failed to add search query');
     }

@@ -194,6 +194,12 @@ abstract class AppLocalizations {
   /// **'Language'**
   String get sectionLanguage;
 
+  /// No description provided for @sectionNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get sectionNotifications;
+
   /// No description provided for @labelDarkMode.
   ///
   /// In en, this message translates to:
@@ -229,6 +235,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Privacy Policy'**
   String get labelPrivacyPolicy;
+
+  /// No description provided for @labelPushNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Push Notifications'**
+  String get labelPushNotifications;
+
+  /// No description provided for @labelNotificationsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get notified when new articles are published'**
+  String get labelNotificationsSubtitle;
 
   /// No description provided for @badgeLive.
   ///

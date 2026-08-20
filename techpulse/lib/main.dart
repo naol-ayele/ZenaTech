@@ -17,46 +17,51 @@ import 'l10n/app_localizations.dart';
 
 String? _pendingNotificationArticleId;
 
+const String _sentryDsn = String.fromEnvironment('SENTRY_DSN', defaultValue: '');
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
 
-  await SentryFlutter.init(
-    (options) {
-      options.dsn = const String.fromEnvironment(
-        'SENTRY_DSN',
-        defaultValue: '',
-      );
-      options.tracesSampleRate = 0.2;
-    },
-    appRunner: () async {
-      try {
-        await adManager.initialize();
-      } catch (e) {
-        debugPrint('main: adManager.initialize() failed - $e');
-      }
-      try {
-        await userService.initialize();
-      } catch (e) {
-        debugPrint('main: userService.initialize() failed - $e');
-      }
-      try {
-        await notificationServiceProvider.initialize();
-      } catch (e) {
-        debugPrint('main: notificationServiceProvider.initialize() failed - $e');
-      }
-      final initialMessage =
-          await notificationServiceProvider.getInitialMessage();
-      _pendingNotificationArticleId = initialMessage?.data['articleId'];
-      try {
-        await connectivityServiceProvider.initialize();
-      } catch (e) {
-        debugPrint('main: connectivityServiceProvider.initialize() failed - $e');
-      }
+  if (_sentryDsn.isNotEmpty) {
+    await SentryFlutter.init(
+      (options) {
+        options.dsn = _sentryDsn;
+        options.tracesSampleRate = 0.2;
+      },
+      appRunner: _runApp,
+    );
+  } else {
+    await _runApp();
+  }
+}
 
-      runApp(const ProviderScope(child: TechPulseApp()));
-    },
-  );
+Future<void> _runApp() async {
+  try {
+    await adManager.initialize();
+  } catch (e) {
+    debugPrint('main: adManager.initialize() failed - $e');
+  }
+  try {
+    await userService.initialize();
+  } catch (e) {
+    debugPrint('main: userService.initialize() failed - $e');
+  }
+  try {
+    await notificationServiceProvider.initialize();
+  } catch (e) {
+    debugPrint('main: notificationServiceProvider.initialize() failed - $e');
+  }
+  final initialMessage =
+      await notificationServiceProvider.getInitialMessage();
+  _pendingNotificationArticleId = initialMessage?.data['articleId'];
+  try {
+    await connectivityServiceProvider.initialize();
+  } catch (e) {
+    debugPrint('main: connectivityServiceProvider.initialize() failed - $e');
+  }
+
+  runApp(const ProviderScope(child: TechPulseApp()));
 }
 
 class TechPulseApp extends ConsumerStatefulWidget {

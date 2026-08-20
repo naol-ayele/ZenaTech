@@ -337,8 +337,9 @@ router.post('/articles', authenticateApiKey, strictLimiter, validateArticleInput
       [category]
     );
 
-    const notification = await NotificationService.sendNewArticleNotification(newArticle);
-    console.log('Notification result:', notification);
+    Promise.resolve(NotificationService.sendNewArticleNotification(newArticle))
+      .then((result) => console.log('Notification result:', result))
+      .catch((error) => console.error('Notification error:', error));
 
     res.status(201).json(newArticle);
   } catch (error) {
